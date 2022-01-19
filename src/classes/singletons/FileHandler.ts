@@ -1,17 +1,17 @@
-import { readFileSync, writeFile, writeFileSync } from "fs";
-//import { dirname, resolve } from "path";
+import { appendFile, readFileSync, writeFileSync, access, constants } from "fs";
+
 
 export class FileHandler {
-  private static instance : FileHandler = new FileHandler();
- 
+  private static instance: FileHandler = new FileHandler();
+
 
   private constructor() {
-    if(FileHandler.instance) 
+    if (FileHandler.instance)
       throw new Error("Instead of using new FileHandler(), please use FileHandler.getInstance() for Singleton!")
     FileHandler.instance = this;
   }
 
-  public static getInstance() : FileHandler {
+  public static getInstance(): FileHandler {
     return FileHandler.instance;
   }
 
@@ -21,14 +21,14 @@ export class FileHandler {
     return json;
   }
 
-  public writeJsonFile(_pathToFile : string, _dataToFile: any) : void {
+  public writeJsonFile(_pathToFile: string, _dataToFile: any): void {
+    writeFileSync(_pathToFile, JSON.stringify(_dataToFile));
+  }
+
+  public appendJsonFile(_pathToFile: string, _dataToFile: any): void {
     let file: any[] = this.readJsonFile(_pathToFile)
     file.push(_dataToFile)
     writeFileSync(_pathToFile, JSON.stringify(file));
-  }
-  
-  public overwriteJsonFile(_pathToFile : string, _dataToFile: any) : void {
-    writeFileSync(_pathToFile, JSON.stringify(_dataToFile));
   }
 
 }

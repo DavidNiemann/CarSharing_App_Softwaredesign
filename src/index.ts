@@ -1,6 +1,7 @@
 import * as readline from 'readline';
+import { App } from './classes/App';
 
-namespace Project {
+namespace CarSharing {
   export class Main {
     public consoleLine : readline.ReadLine;
 
@@ -11,8 +12,8 @@ namespace Project {
       })
     }
 
-    public showProgramStatus() : void {
-      this.consoleLine.write("I'm running");
+    public async showProgramStatus() : Promise<void> {
+      await App.app.startApp();
     }
   }
 

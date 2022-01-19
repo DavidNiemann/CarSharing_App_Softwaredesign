@@ -9,7 +9,7 @@ class Console {
       output: process.stdout
     })
 
-  constructor() {
+   private constructor() {
     if(Console.instance) 
       throw new Error("Instead of using new Console(), please use Console.getInstance() for Singleton!")
     Console.instance = this;
@@ -42,7 +42,7 @@ class Console {
   }
 
   //for input
-  public askForAnAnswers(_question: string , _type: PromptType) : Promise<Answers<string>> {
+  public showType(_question: string , _type: PromptType) : Promise<Answers<string>> {
     return prompts({
       type: _type,
       name: 'value',
