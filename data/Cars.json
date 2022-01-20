@@ -1,1 +1,146 @@
-[{"id":"id","designation":"d","driveType":"electronic","pricePerMinute":1,"flatRate":10,"bookingTimeFromTo":["1999-04-15T23:00:00.000Z","1999-04-16T03:00:00.000Z"],"maxTimeUsage":1}]
+[
+    {
+        "id": "id1",
+        "designation": "a",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    },
+    {
+        "id": "id2",
+        "designation": "b",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    },
+    {
+        "id": "id3",
+        "designation": "c",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    },
+    {
+        "id": "id4",
+        "designation": "d",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    },
+    {
+        "id": "id5",
+        "designation": "e",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    },
+    {
+        "id": "id6",
+        "designation": "f",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    },
+    {
+        "id": "id7",
+        "designation": "g",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    },
+    {
+        "id": "id8",
+        "designation": "h",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    },
+    {
+        "id": "id9",
+        "designation": "i",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    },
+    {
+        "id": "id10",
+        "designation": "j",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    },
+    {
+        "id": "id11",
+        "designation": "k",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    },
+    {
+        "id": "id12",
+        "designation": "l",
+        "driveType": "electronic",
+        "pricePerMinute": 1,
+        "flatRate": 10,
+        "bookingTimeFromTo": [
+            "1999-04-15T23:00:00.000Z",
+            "1999-04-16T03:00:00.000Z"
+        ],
+        "maxTimeUsage": 1
+    }
+]

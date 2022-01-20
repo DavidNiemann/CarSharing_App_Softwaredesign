@@ -7,6 +7,7 @@ import { Answers } from "prompts";
 import { UserTasks } from "../enums/UserTasks";
 import { UserStatus } from "../enums/UserStatus";
 import { DriveType } from "../enums/Drivetype";
+import { Car } from "./Car";
 
 
 export class App {
@@ -17,10 +18,11 @@ export class App {
 
         await this.showOptions();
 
+
     }
 
     public async showOptions(): Promise<void> {
-       await this.hndUserTasksToString();
+        await this.hndUserTasksToString();
         let answer: Answers<string> = await Console.showOptions(
             this.userTasks,
             "Which option do you want to choose?"
@@ -46,7 +48,7 @@ export class App {
                 await this.hadAddNewCar();
                 break;
             case UserTasks.ShowCarList:
-
+                await this.showCars();
                 break;
             default:
                 Console.printLine("Option not available!");
@@ -74,7 +76,7 @@ export class App {
                 success = await this.thisUser.register(userName.value, password.value);
                 if (!success) {
                     Console.printLine("Nuzernamen enthält sonderzeichen oder ist schon vergeben");
-                   await this.hndUserLogin(_task);
+                    await this.hndUserLogin(_task);
                 }
                 break;
 
@@ -110,10 +112,10 @@ export class App {
 
     public async hadAddNewCar(): Promise<void> {
         let carId: Answers<string> = await Console.showType("gib die autoId ein", 'text');
-        let designation: Answers<string> = await Console.showType("gib dei Bezeichnung ein", 'text');
+        let designation: Answers<string> = await Console.showType("gib die Bezeichnung ein", 'text');
         let driveType: Answers<string> = await Console.showOptions(
             Object.values(DriveType),
-            "wähl den Anteib aus" );
+            "wähl den Anteib aus");
 
         let flatRate: Answers<string> = await Console.showType("gib den pauschalpreis ein", 'number');
         let pricePerMinute: Answers<string> = await Console.showType("gib dein Preis pro Minute  ein", 'number');
@@ -126,4 +128,34 @@ export class App {
         CarList.addNewCar(carId.value, designation.value, driveType.value, pricePerMinute.value, flatRate.value, pricePerMinute.value, bookingTimeFromTo);
 
     }
+
+    private async showCars(): Promise<void> {
+
+        let carDesignations = await CarList.getCarDesignation()
+        carDesignations.push("other Cars");
+        let answer: Answers<string> = await Console.showOptions(
+            carDesignations,
+            "Which Car do you want to choose?"
+        );
+
+        if (answer.value >= carDesignations.length) {
+            await this.showCars();
+        } else {
+            let carPropertieString: string[] = await CarList.getCarProperties(answer.value - 1);
+            for (let nPropertie: number = 0; nPropertie < carPropertieString.length; nPropertie++) {
+                Console.printLine(carPropertieString[nPropertie]);
+
+            }
+        }
+
+        this.hadBooking(answer.value - 1);
+
+    }
+
+    private async hadBooking(_carNumber: number): Promise<void> {
+
+
+    }
+
+
 }
