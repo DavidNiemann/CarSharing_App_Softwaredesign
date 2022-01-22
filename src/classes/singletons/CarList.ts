@@ -31,7 +31,7 @@ export class CarList {
 
     }
 
-    public async getCarDesignation(): Promise<string[]> {
+    public async getCarDesignation(): Promise<string[]> {// angebe ob es elektro ist einfügen
         if (this.carCounter == 0 || this.carCounter >= this.allSaveCars.length) {
             this.allSaveCars = await this.getAllCars();
             this.carCounter = 0;
@@ -44,26 +44,26 @@ export class CarList {
         for (let nCar = this.carCounter; nCar < this.allSaveCars.length; nCar++) {
 
             if (CarsDesignation.length >= 10) {
-                
+
                 break;
             }
-
+            
             CarsDesignation.push(this.allSaveCars[nCar].designation);
             this.carCounter++;
         }
-        
+
         return CarsDesignation;
     }
 
     public async getCarProperties(_carNumber: number): Promise<string[]> {
-        let chosenCar: Car = this.allSaveCars[_carNumber + this.carCounter - 1];
+        let chosenCar: Car = this.allSaveCars[_carNumber + Math.ceil((this.carCounter-10)/10)*10];
         let PropertieString: string[] = [];
         chosenCar.bookingTimeFromTo[0] = new Date(chosenCar.bookingTimeFromTo[0])
         chosenCar.bookingTimeFromTo[1] = new Date(chosenCar.bookingTimeFromTo[1])
         for (let [key, value] of Object.entries(chosenCar)) {
             if (key == "bookingTimeFromTo") {
 
-                PropertieString.push(key + ": " + chosenCar.bookingTimeFromTo[0].getHours() + " to "+ chosenCar.bookingTimeFromTo[1].getHours() + " o'clock");
+                PropertieString.push(key + ": " + chosenCar.bookingTimeFromTo[0].getHours() + " to " + chosenCar.bookingTimeFromTo[1].getHours() + " o'clock");
             }
             else {
                 PropertieString.push(key + ": " + value);
@@ -74,6 +74,15 @@ export class CarList {
         return PropertieString;
     }
 
+    public async getCarId(_carNumber: number): Promise<string> {
+        return this.allSaveCars[_carNumber + Math.ceil((this.carCounter-10)/10)*10].id;
+    }
+
+    public async getCarPrice(_carNumber: number, _duration: number): Promise<number> {
+    
+        return this.allSaveCars[_carNumber + Math.ceil((this.carCounter-10)/10)*10].flatRate + (this.allSaveCars[_carNumber + Math.ceil((this.carCounter-10)/10)*10].pricePerMinute *_duration);
+    }
+    
 }
 
 export default CarList.getInstance();

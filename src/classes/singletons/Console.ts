@@ -51,14 +51,24 @@ class Console {
     })
   }
 
+  public showHour(_question: string) : Promise<Answers<string>> {
+    return prompts({
+      type: 'date',
+      name: 'value',
+      message: _question,
+      mask: "HH:mm",
+      initial: new Date(1999,3,16,0,0,0),
+     
+    })
+  }
+
   public showDate(_question: string) : Promise<Answers<string>> {
     return prompts({
       type: 'date',
       name: 'value',
       message: _question,
-      mask: "HH:00",
-      initial: new Date(1999,3,16,0,0,0),
-     
+      mask: "YYYY-MM-DD HH:mm",
+      validate: date => date < Date.now() ? 'Not in the past' : true
     })
   }
 
