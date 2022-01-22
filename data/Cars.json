@@ -1,1 +1,1 @@
-[{"id":"id1","designation":"a","driveType":"electronic","pricePerMinute":1,"flatRate":10,"bookingTimeFromTo":["1999-04-16T04:00:00.000Z","1999-04-16T18:00:00.000Z"],"maxTimeUsage":120},{"id":"id2","designation":"b","driveType":"conventional","pricePerMinute":2,"flatRate":20,"bookingTimeFromTo":["1999-04-16T06:00:00.000Z","1999-04-16T16:00:00.000Z"],"maxTimeUsage":60}]
+[{"id":"id1","designation":"a","driveType":"conventional","pricePerMinute":1,"flatRate":10,"bookingTimeFromTo":["1999-04-16T04:00:00.000Z","1999-04-16T20:00:00.000Z"],"maxTimeUsage":120}]

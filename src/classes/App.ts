@@ -173,10 +173,23 @@ export class App {
 
             let dateOFBooking: Answers<string> = await Console.showDate("an welchem Tag mit start zeitpunkt soll die Buchung sein");
             let bookingDuration: Answers<string> = await Console.showType("wie lange wollen sie dass auto buchen in Minuten", 'number');
-            
-            await Booking.addBooking(dateOFBooking.value, bookingDuration.value, this.thisUser.username, await CarList.getCarId(_carNumber), await CarList.getCarPrice(_carNumber, bookingDuration.value));
 
+            let success: boolean = await CarList.checkAvailability(await CarList.getCarId(_carNumber), dateOFBooking.value, bookingDuration.value);
+
+            if (success == false) {
+                Console.printLine("Das Auto ist zu dieser Zeit nicht verfügbar");
+                return;
+            }
+
+            success = await Booking.addBooking(dateOFBooking.value, bookingDuration.value, this.thisUser.username, await CarList.getCarId(_carNumber), await CarList.getCarPrice(_carNumber, bookingDuration.value));
+            
+            if (success) {
+                Console.printLine("Die Buchung wurde Aufgenommen");
+            } else {
+                Console.printLine("Die Auto ist in dem Zeitraum nicht verfügbar");
+            }
         }
+
 
 
 

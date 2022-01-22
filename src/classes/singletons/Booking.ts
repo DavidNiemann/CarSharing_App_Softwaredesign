@@ -15,7 +15,7 @@ export class Booking {
         return Booking.instance;
     }
 
-    public async addBooking(_date: Date, _duration: number, _userName: string, _carId: string, _price: number): Promise<void> {
+    public async addBooking(_date: Date, _duration: number, _userName: string, _carId: string, _price: number): Promise<boolean> {
         let newBooking: BookingDao = {
             date: _date,
             duration: _duration,
@@ -26,6 +26,11 @@ export class Booking {
         if (await this.checkBookingTime(_carId, _date, _duration)) {
 
             FileHandler.appendJsonFile("./data/Booking.json", newBooking);
+            return true;
+        }
+        else {
+
+            return false;
         }
 
 
@@ -51,8 +56,18 @@ export class Booking {
                     }
 
                 }
+                oldBookdate = new Date(allBookings[nBooking].date);
+                if (bookdate <= oldBookdate) {
 
+                    bookdate.setMinutes(bookdate.getMinutes() + _duration % 60);
+                    bookdate.setHours(bookdate.getHours() + _duration / 60);
+                    // console.log(oldBookdate);
 
+                    if (bookdate >= oldBookdate) {
+                        return false;
+                    }
+
+                }
 
             }
 
