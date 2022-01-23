@@ -1,42 +1,43 @@
 
 import Console from "./singletons/Console";
 import CarList from "./singletons/CarList";
+import Booking from "./singletons/Booking";
 
 import { User } from "./User";
 import { Answers } from "prompts";
 import { UserTasks } from "../enums/UserTasks";
 import { UserStatus } from "../enums/UserStatus";
 import { DriveType } from "../enums/Drivetype";
-import Booking from "./singletons/Booking";
+import { MessagesGer } from "../enums/MessagesGerman";
 
 
 
 export class App {
     private thisUser: User = new User();
     public static app: App = new App();
-    private userTasks: string[] = [];
     private run: boolean = true;
     public async startApp(): Promise<void> {
         while (this.run) {
-            await this.hndUserTasksToString();
-            await this.showOptions();
+
+            await this.showOptions(await this.hndUserTasksToString());
         }
     }
 
-    public async showOptions(): Promise<void> {
+    public async showOptions(_task: string[]): Promise<void> {
 
         let answer: Answers<string> = await Console.showOptions(
-            this.userTasks,
-            "was wollen sie machen?"
+            _task,
+            MessagesGer.QuestionTask
         );
 
-        await this.hndAnswerTasks(answer.value);
+
+        await this.hndAnswerTasks(_task[answer.value - 1]);
     }
 
 
-    private async hndAnswerTasks(_tasknumber: number): Promise<void> {
+    private async hndAnswerTasks(_task: string): Promise<void> {
 
-        switch (this.userTasks[_tasknumber - 1]) {
+        switch (_task) {
             case UserTasks.SearchCar:
                 await this.searchCars();
                 break;
@@ -53,22 +54,22 @@ export class App {
                 await this.showCars();
                 break;
             default:
-                Console.printLine("Option not available!");
+               break;
         }
 
     }
 
 
     public async hndUserLogin(_task: UserTasks): Promise<void> {
-        let userName: Answers<string> = await Console.showType("gib dein Nutzernamen ein", 'text')
-        let password: Answers<string> = await Console.showType("gib dein Passwort ein", 'password')
+        let userName: Answers<string> = await Console.showType(MessagesGer.QuestionUsername, 'text')
+        let password: Answers<string> = await Console.showType(MessagesGer.QuestionPassword, 'password')
         let success: boolean = false;
 
         switch (_task) {
             case UserTasks.Login:
                 success = await this.thisUser.login(userName.value, password.value);
                 if (!success) {
-                    Console.printLine("Nutzernamen oder passwort falsch");
+                    Console.printLine(MessagesGer.MessageLogin);
                     await this.hndUserLogin(_task);
                 }
 
@@ -76,7 +77,7 @@ export class App {
             case UserTasks.Register:
                 success = await this.thisUser.register(userName.value, password.value);
                 if (!success) {
-                    Console.printLine("Nuzernamen enthält sonderzeichen oder ist schon vergeben");
+                    Console.printLine(MessagesGer.MessageUsername);
                     await this.hndUserLogin(_task);
                 }
                 break;
@@ -85,45 +86,43 @@ export class App {
 
     }
 
-    private async hndUserTasksToString(): Promise<void> {
+    private async hndUserTasksToString(): Promise<string[]> {
 
-        this.userTasks = [];
+        let userTasks: string[] = [];
 
         for (let nTask = 0; nTask < Object.values(UserTasks).length; nTask++) {
 
 
             if (Object.values(UserTasks)[nTask] == UserTasks.RegisterCar) {
                 if (this.thisUser.userstatus == UserStatus.Administrator) {
-                    this.userTasks.push(Object.values(UserTasks)[nTask]);
+                    userTasks.push(Object.values(UserTasks)[nTask]);
                 }
             } else if (Object.values(UserTasks)[nTask] == UserTasks.Login || Object.values(UserTasks)[nTask] == UserTasks.Register) {
                 if (this.thisUser.userstatus == UserStatus.Guest) {
-                    this.userTasks.push(Object.values(UserTasks)[nTask]);
+                    userTasks.push(Object.values(UserTasks)[nTask]);
                 }
             }
-            /* else if (Object.values(UserTasks)[nTask] == UserTasks.SearchCar) {
-                continue;
-            } */
-            else { this.userTasks.push(Object.values(UserTasks)[nTask]) }
+            else { userTasks.push(Object.values(UserTasks)[nTask]) }
 
 
 
         }
+        return userTasks;
 
     }
 
     public async hadAddNewCar(): Promise<void> {
-        let designation: Answers<string> = await Console.showType("gib die Bezeichnung ein", 'text');
+        let designation: Answers<string> = await Console.showType(MessagesGer.QuestionCarDesignations, 'text');
         let driveType: Answers<string> = await Console.showOptions(
             Object.values(DriveType),
-            "wähl den Anteib aus");
+           MessagesGer.QuestionCarType);
 
-        let flatRate: Answers<string> = await Console.showType("gib den pauschalpreis ein", 'number');
-        let pricePerMinute: Answers<string> = await Console.showType("gib dein Preis pro Minute  ein", 'number');
-        let maxTimeforUse: Answers<string> = await Console.showType("gib ein wie viele minuten maximal gemieted werden kann", 'number');
+        let flatRate: Answers<string> = await Console.showType(MessagesGer.QuestionCarCost, 'number');
+        let pricePerMinute: Answers<string> = await Console.showType(MessagesGer.QuestionCarRentalPrice, 'number');
+        let maxTimeforUse: Answers<string> = await Console.showType(MessagesGer.QuestionCarMaxRentalDuration, 'number');
         let bookingTimeFromTo: Date[] = [];
         for (let index = 0; index < 2; index++) {
-            let bookingAnswer: Answers<string> = await Console.showHour("gib dien Zeitpunkt ein in dem man buchen kann")
+            let bookingAnswer: Answers<string> = await Console.showHour(MessagesGer.QuestionCarMaxRentalPeriod)
             bookingTimeFromTo.push(bookingAnswer.value)
         }
 
@@ -140,7 +139,7 @@ export class App {
 
         let answer: Answers<string> = await Console.showOptions(
             carDesignations,
-            "Which Car do you want to choose?"
+            MessagesGer.QuestionCarChoice
         );
         if (answer.value >= carDesignations.length) {
             return;
@@ -152,7 +151,7 @@ export class App {
         } else {
             await this.showCarProperties(answer.value - 1);
         }
-        let ifBooking: Answers<string> = await Console.showType("Wollen sie diese Auto Buchen", 'confirm');
+        let ifBooking: Answers<string> = await Console.showType(MessagesGer.QuestionCarConfirmation, 'confirm');
         if (ifBooking.value == true) { await this.hadBooking(answer.value - 1); } else {
             await this.showCars();
         }
@@ -164,29 +163,30 @@ export class App {
 
     private async hadBooking(_carNumber: number): Promise<void> {
         if (this.thisUser.userstatus == UserStatus.Guest) {
-            Console.printLine("Sie müssen angemeldet sein um Auutos mieten zu kömnnen");
-
-            return;
-
+            Console.printLine(MessagesGer.MessageRentLogin);
+            await this.showOptions([UserTasks.Login, UserTasks.Register, "Zurück"])
+            if (this.thisUser.userstatus == UserStatus.Guest) {// usertask zurück einfügen 
+                return;
+            }
         }
 
 
-        let dateOFBooking: Answers<string> = await Console.showDate("an welchem Tag mit start zeitpunkt soll die Buchung sein");
-        let bookingDuration: Answers<string> = await Console.showType("wie lange wollen sie dass auto buchen in Minuten", 'number');
+        let dateOFBooking: Answers<string> = await Console.showDate(MessagesGer.QuestionRentStartTime);
+        let bookingDuration: Answers<string> = await Console.showType(MessagesGer.QuestionRentDuration, 'number');
 
         let success: boolean = await CarList.checkAvailability(_carNumber, dateOFBooking.value, bookingDuration.value);
 
         if (success == false) {
-            Console.printLine("Das Auto ist zu dieser Zeit nicht verfügbar");
+            Console.printLine(MessagesGer.MessageRentTime);
             return;
         }
 
         success = await Booking.addBooking(dateOFBooking.value, bookingDuration.value, this.thisUser.username, _carNumber, await CarList.getCarPrice(_carNumber, bookingDuration.value));
 
         if (success) {
-            Console.printLine("Die Buchung wurde Aufgenommen");
+            Console.printLine(MessagesGer.MessageBookingConfirmation);
         } else {
-            Console.printLine("Die Auto ist in dem Zeitraum nicht verfügbar");
+            Console.printLine(MessagesGer.MessageRentTime);
         }
 
 
@@ -206,21 +206,24 @@ export class App {
 
     private async searchCars(): Promise<void> {
 
-        let designation: Answers<string> = await Console.showType("gib die Bezeichnung ein", 'text');
+        let designation: Answers<string> = await Console.showType(MessagesGer.QuestionCarDesignations, 'text');
         let answer: Answers<string> = await Console.showOptions(
             Object.values(DriveType),
-            "welche Antreibsart hat das Auto?"
+            MessagesGer.QuestionCarType
         );
 
         let foundCarId: number | null = await CarList.getIdByDesignation(designation.value, Object.values(DriveType)[answer.value - 1]);
-        console.log(foundCarId);
         if (foundCarId != null) {
             await this.showCarProperties(foundCarId);
-            let ifBooking: Answers<string> = await Console.showType("Wollen sie diese Auto Buchen", 'confirm');
+            let ifBooking: Answers<string> = await Console.showType(MessagesGer.QuestionCarConfirmation, 'confirm');
             if (ifBooking.value == true) {
 
                 await this.hadBooking(foundCarId);
             }
+        }
+        else {
+
+            Console.printLine(MessagesGer.MessageCarSearch);
         }
     }
 
