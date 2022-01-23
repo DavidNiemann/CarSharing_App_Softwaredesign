@@ -53,4 +53,9 @@ export class User {
         return pattern.test(_username);
     }
 
+    public async logout(): Promise<void> {
+        this.userstatus = UserStatus.Guest;
+        this.username = "";
+    }
+
 }

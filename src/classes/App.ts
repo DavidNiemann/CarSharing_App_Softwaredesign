@@ -53,8 +53,11 @@ export class App {
             case UserTasks.ShowCarList:
                 await this.showCars();
                 break;
+            case UserTasks.Logout:
+                await this.thisUser.logout();
+                break;
             default:
-               break;
+                break;
         }
 
     }
@@ -89,20 +92,26 @@ export class App {
     private async hndUserTasksToString(): Promise<string[]> {
 
         let userTasks: string[] = [];
+        let allTasks: string[] = Object.values(UserTasks);
 
-        for (let nTask = 0; nTask < Object.values(UserTasks).length; nTask++) {
+        for (let nTask = 0; nTask < allTasks.length; nTask++) {
 
 
-            if (Object.values(UserTasks)[nTask] == UserTasks.RegisterCar) {
+            if (allTasks[nTask] == UserTasks.RegisterCar) {
                 if (this.thisUser.userstatus == UserStatus.Administrator) {
-                    userTasks.push(Object.values(UserTasks)[nTask]);
+                    userTasks.push(allTasks[nTask]);
                 }
-            } else if (Object.values(UserTasks)[nTask] == UserTasks.Login || Object.values(UserTasks)[nTask] == UserTasks.Register) {
+            } else if (allTasks[nTask] == UserTasks.Login || allTasks[nTask] == UserTasks.Register) {
                 if (this.thisUser.userstatus == UserStatus.Guest) {
-                    userTasks.push(Object.values(UserTasks)[nTask]);
+                    userTasks.push(allTasks[nTask]);
                 }
             }
-            else { userTasks.push(Object.values(UserTasks)[nTask]) }
+            else if (allTasks[nTask] == UserTasks.Logout) {
+                if (this.thisUser.userstatus != UserStatus.Guest) {
+                    userTasks.push(allTasks[nTask]);
+                }
+            }
+            else { userTasks.push(allTasks[nTask]) }
 
 
 
@@ -115,7 +124,7 @@ export class App {
         let designation: Answers<string> = await Console.showType(MessagesGer.QuestionCarDesignations, 'text');
         let driveType: Answers<string> = await Console.showOptions(
             Object.values(DriveType),
-           MessagesGer.QuestionCarType);
+            MessagesGer.QuestionCarType);
 
         let flatRate: Answers<string> = await Console.showType(MessagesGer.QuestionCarCost, 'number');
         let pricePerMinute: Answers<string> = await Console.showType(MessagesGer.QuestionCarRentalPrice, 'number');
