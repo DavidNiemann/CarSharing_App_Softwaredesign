@@ -1,1 +1,16 @@
-[]
+[
+    {
+        "date": "2022-01-24T13:10:28.846Z",
+        "duration": 10,
+        "userName": "admin",
+        "carId": 0,
+        "price": 20
+    },
+    {
+        "date": "2022-01-24T14:00:31.439Z",
+        "duration": 120,
+        "userName": "admin",
+        "carId": 2,
+        "price": 135
+    }
+]

@@ -2,7 +2,7 @@ import { DriveType } from "../enums/Drivetype";
 
 
 export class Car {
-    public id: string;
+    public id: number;
     public designation: string;
     public driveType: string;
     public flatRate: number;
@@ -10,7 +10,7 @@ export class Car {
     public maxTimeUsage: number;
     public bookingTimeFromTo: Date[];
 
-    constructor(_id: string, _designation: string, _driveType: DriveType, _pricePerMinute: number, _flatRate: number, _maxTimeUsage: number, _bookingTimeFromTo: Date[]) {
+    constructor(_id: number, _designation: string, _driveType: DriveType, _pricePerMinute: number, _flatRate: number, _maxTimeUsage: number, _bookingTimeFromTo: Date[]) {
         this.id = _id;
         this.designation = _designation;
         this.driveType = _driveType

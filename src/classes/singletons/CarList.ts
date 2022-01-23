@@ -5,7 +5,6 @@ import FileHandler from "./FileHandler";
 export class CarList {
 
     private static instance: CarList = new CarList();
-    private allSaveCars: Car[] = [];
     private carCounter: number = 0;
 
     private constructor() {
@@ -19,11 +18,11 @@ export class CarList {
     }
 
 
-    public async addNewCar(_id: string, _designation: string, _driveType: number, _pricePerMinute: number, _flatRate: number, _maxTimeUsage: number, _bookingTimeFromTo: Date[]): Promise<void> {
+    public async addNewCar(_designation: string, _driveType: number, _pricePerMinute: number, _flatRate: number, _maxTimeUsage: number, _bookingTimeFromTo: Date[]): Promise<void> {
 
+        let alleCars: Car[] = await this.getAllCars();
 
-
-        FileHandler.appendJsonFile("./data/Cars.json", new Car(_id, _designation, Object.values(DriveType)[_driveType - 1], _pricePerMinute, _flatRate, _maxTimeUsage, _bookingTimeFromTo));
+        FileHandler.appendJsonFile("./data/Cars.json", new Car(alleCars.length, _designation, Object.values(DriveType)[_driveType - 1], _pricePerMinute, _flatRate, _maxTimeUsage, _bookingTimeFromTo));
     }
 
     private async getAllCars(): Promise<Car[]> {
@@ -32,30 +31,35 @@ export class CarList {
     }
 
     public async getCarDesignation(): Promise<string[]> {// angebe ob es elektro ist einfügen
-        if (this.carCounter == 0 || this.carCounter >= this.allSaveCars.length) {
-            this.allSaveCars = await this.getAllCars();
+        let allSaveCars: Car[] = await this.getAllCars()
+        if (this.carCounter >= allSaveCars.length) {
             this.carCounter = 0;
-        }
-
+         }
+       
 
         let CarsDesignation: string[] = [];
 
 
-        for (let nCar = this.carCounter; nCar < this.allSaveCars.length; nCar++) {
+        for (let nCar = this.carCounter; nCar < allSaveCars.length; nCar++) {
 
             if (CarsDesignation.length >= 10) {
-
+               
                 break;
             }
-
-            CarsDesignation.push(this.allSaveCars[nCar].designation);
+            if(allSaveCars[nCar].driveType == DriveType.Electronic){
+                CarsDesignation.push(allSaveCars[nCar].designation + "(E)");
+                this.carCounter++;
+            }
+            else{
+            CarsDesignation.push(allSaveCars[nCar].designation);
             this.carCounter++;
+            }
         }
 
         return CarsDesignation;
     }
 
-    public async getCarProperties(_carID: string): Promise<string[]> {
+    public async getCarProperties(_carID: number): Promise<string[]> {
         let chosenCar: Car | null = await this.getCarById(_carID);
         if (chosenCar == null) {
             return ["Auto nicht gefunden"]
@@ -77,11 +81,7 @@ export class CarList {
         return PropertieString;
     }
 
-    public async getCarId(_carNumber: number): Promise<string> {
-        return this.allSaveCars[_carNumber + Math.ceil((this.carCounter - 10) / 10) * 10].id;
-    }
-
-    private async getCarById(_carID: string): Promise<Car | null> {
+    private async getCarById(_carID: number): Promise<Car | null> {
         let allCars: Car[] = await this.getAllCars();
         for (let nCar = 0; nCar < allCars.length; nCar++) {
             if (allCars[nCar].id == _carID) {
@@ -92,7 +92,7 @@ export class CarList {
         return null;
 
     }
-    public async getIdByDesignation(_carDesignation: string, _driveType?: DriveType): Promise<string | null> {
+    public async getIdByDesignation(_carDesignation: string, _driveType?: DriveType): Promise<number | null> {
         let allCars: Car[] = await this.getAllCars();
         for (let nCar = 0; nCar < allCars.length; nCar++) {
             if (allCars[nCar].designation == _carDesignation) {
@@ -107,12 +107,12 @@ export class CarList {
 
     }
 
-    public async getCarPrice(_carNumber: number, _duration: number): Promise<number> {
-
-        return this.allSaveCars[_carNumber + Math.ceil((this.carCounter - 10) / 10) * 10].flatRate + (this.allSaveCars[_carNumber + Math.ceil((this.carCounter - 10) / 10) * 10].pricePerMinute * _duration);
+    public async getCarPrice(_carID: number, _duration: number): Promise<number> {
+        let allCars: Car[] = await this.getAllCars();
+        return allCars[_carID].flatRate + (allCars[_carID].pricePerMinute * _duration);
     }
 
-    public async checkAvailability(_carID: string, _startTime: Date, _duration: number): Promise<boolean> { // einigen Auf id oder ID
+    public async checkAvailability(_carID: number, _startTime: Date, _duration: number): Promise<boolean> { // einigen Auf id oder ID
 
         let car: Car | null = await this.getCarById(_carID);
         if (car == null) {

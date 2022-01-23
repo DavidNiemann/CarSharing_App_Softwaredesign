@@ -15,7 +15,7 @@ export class Booking {
         return Booking.instance;
     }
 
-    public async addBooking(_date: Date, _duration: number, _userName: string, _carId: string, _price: number): Promise<boolean> {
+    public async addBooking(_date: Date, _duration: number, _userName: string, _carId: number, _price: number): Promise<boolean> {
         let newBooking: BookingDao = {
             date: _date,
             duration: _duration,
@@ -36,7 +36,7 @@ export class Booking {
 
     }
 
-    private async checkBookingTime(_carId: string, _date: Date, _duration: number): Promise<boolean> {
+    private async checkBookingTime(_carId: number, _date: Date, _duration: number): Promise<boolean> {
         let allBookings: BookingDao[] = await this.getAllBooking();
         let bookdate: Date = new Date(_date);
         for (let nBooking = 0; nBooking < allBookings.length; nBooking++) {

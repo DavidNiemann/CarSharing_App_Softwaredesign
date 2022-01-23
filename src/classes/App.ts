@@ -113,7 +113,6 @@ export class App {
     }
 
     public async hadAddNewCar(): Promise<void> {
-        let carId: Answers<string> = await Console.showType("gib die autoId ein", 'text');
         let designation: Answers<string> = await Console.showType("gib die Bezeichnung ein", 'text');
         let driveType: Answers<string> = await Console.showOptions(
             Object.values(DriveType),
@@ -128,7 +127,7 @@ export class App {
             bookingTimeFromTo.push(bookingAnswer.value)
         }
 
-        CarList.addNewCar(carId.value, designation.value, driveType.value, pricePerMinute.value, flatRate.value, maxTimeforUse.value, bookingTimeFromTo);
+        CarList.addNewCar(designation.value, driveType.value, pricePerMinute.value, flatRate.value, maxTimeforUse.value, bookingTimeFromTo);
 
     }
 
@@ -149,8 +148,9 @@ export class App {
         if (answer.value == carDesignations.length - 1) {
             await this.showCars();
             return;
+
         } else {
-            await this.showCarProperties(await CarList.getCarId(answer.value - 1));
+            await this.showCarProperties(answer.value - 1);
         }
         let ifBooking: Answers<string> = await Console.showType("Wollen sie diese Auto Buchen", 'confirm');
         if (ifBooking.value == true) { await this.hadBooking(answer.value - 1); } else {
@@ -164,33 +164,31 @@ export class App {
 
     private async hadBooking(_carNumber: number): Promise<void> {
         if (this.thisUser.userstatus == UserStatus.Guest) {
-            Console.printLine("you must be registered to rent a car");
-            this.userTasks = [];
-            this.userTasks.push(UserTasks.Login);
-            this.userTasks.push(UserTasks.Register);
-            //await this.showOptions();
-            //await this.hadBooking(_carNumber);
+            Console.printLine("Sie müssen angemeldet sein um Auutos mieten zu kömnnen");
 
-        } else {
+            return;
 
-            let dateOFBooking: Answers<string> = await Console.showDate("an welchem Tag mit start zeitpunkt soll die Buchung sein");
-            let bookingDuration: Answers<string> = await Console.showType("wie lange wollen sie dass auto buchen in Minuten", 'number');
-
-            let success: boolean = await CarList.checkAvailability(await CarList.getCarId(_carNumber), dateOFBooking.value, bookingDuration.value);
-
-            if (success == false) {
-                Console.printLine("Das Auto ist zu dieser Zeit nicht verfügbar");
-                return;
-            }
-
-            success = await Booking.addBooking(dateOFBooking.value, bookingDuration.value, this.thisUser.username, await CarList.getCarId(_carNumber), await CarList.getCarPrice(_carNumber, bookingDuration.value));
-
-            if (success) {
-                Console.printLine("Die Buchung wurde Aufgenommen");
-            } else {
-                Console.printLine("Die Auto ist in dem Zeitraum nicht verfügbar");
-            }
         }
+
+
+        let dateOFBooking: Answers<string> = await Console.showDate("an welchem Tag mit start zeitpunkt soll die Buchung sein");
+        let bookingDuration: Answers<string> = await Console.showType("wie lange wollen sie dass auto buchen in Minuten", 'number');
+
+        let success: boolean = await CarList.checkAvailability(_carNumber, dateOFBooking.value, bookingDuration.value);
+
+        if (success == false) {
+            Console.printLine("Das Auto ist zu dieser Zeit nicht verfügbar");
+            return;
+        }
+
+        success = await Booking.addBooking(dateOFBooking.value, bookingDuration.value, this.thisUser.username, _carNumber, await CarList.getCarPrice(_carNumber, bookingDuration.value));
+
+        if (success) {
+            Console.printLine("Die Buchung wurde Aufgenommen");
+        } else {
+            Console.printLine("Die Auto ist in dem Zeitraum nicht verfügbar");
+        }
+
 
 
 
@@ -198,7 +196,7 @@ export class App {
 
     }
 
-    private async showCarProperties(_carId: string): Promise<void> {
+    private async showCarProperties(_carId: number): Promise<void> {
         let carPropertieString: string[] = await CarList.getCarProperties(_carId);
         for (let nPropertie: number = 0; nPropertie < carPropertieString.length; nPropertie++) {
             Console.printLine(carPropertieString[nPropertie]);
@@ -214,11 +212,15 @@ export class App {
             "welche Antreibsart hat das Auto?"
         );
 
-        let foundCarId: string | null = await CarList.getIdByDesignation(designation.value, Object.values(DriveType)[answer.value - 1]);
-        if (foundCarId) {
+        let foundCarId: number | null = await CarList.getIdByDesignation(designation.value, Object.values(DriveType)[answer.value - 1]);
+        console.log(foundCarId);
+        if (foundCarId != null) {
             await this.showCarProperties(foundCarId);
             let ifBooking: Answers<string> = await Console.showType("Wollen sie diese Auto Buchen", 'confirm');
-            if (ifBooking.value == true) {}
+            if (ifBooking.value == true) {
+
+                await this.hadBooking(foundCarId);
+            }
         }
     }
 
