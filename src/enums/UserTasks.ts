@@ -2,6 +2,6 @@ export enum UserTasks {
     Login = "login",
     Register = "register",
     RegisterCar = "register car",
-    ShowCarList = "Show car list",
-    BookCar = "book car"
+    ShowCarList = "show car list",
+    SearchCar = "search Car"
  }

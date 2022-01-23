@@ -55,8 +55,11 @@ export class CarList {
         return CarsDesignation;
     }
 
-    public async getCarProperties(_carNumber: number): Promise<string[]> {
-        let chosenCar: Car = this.allSaveCars[_carNumber + Math.ceil((this.carCounter - 10) / 10) * 10];
+    public async getCarProperties(_carID: string): Promise<string[]> {
+        let chosenCar: Car | null = await this.getCarById(_carID);
+        if (chosenCar == null) {
+            return ["Auto nicht gefunden"]
+        }
         let PropertieString: string[] = [];
         chosenCar.bookingTimeFromTo[0] = new Date(chosenCar.bookingTimeFromTo[0])
         chosenCar.bookingTimeFromTo[1] = new Date(chosenCar.bookingTimeFromTo[1])
@@ -78,11 +81,25 @@ export class CarList {
         return this.allSaveCars[_carNumber + Math.ceil((this.carCounter - 10) / 10) * 10].id;
     }
 
-    public async getCarById(_carID: string): Promise<Car | null> {
+    private async getCarById(_carID: string): Promise<Car | null> {
         let allCars: Car[] = await this.getAllCars();
         for (let nCar = 0; nCar < allCars.length; nCar++) {
             if (allCars[nCar].id == _carID) {
                 return allCars[nCar];
+            }
+
+        }
+        return null;
+
+    }
+    public async getIdByDesignation(_carDesignation: string, _driveType?: DriveType): Promise<string | null> {
+        let allCars: Car[] = await this.getAllCars();
+        for (let nCar = 0; nCar < allCars.length; nCar++) {
+            if (allCars[nCar].designation == _carDesignation) {
+                console.log();
+                if (!_driveType || _driveType == allCars[nCar].driveType) {
+                    return allCars[nCar].id;
+                }
             }
 
         }
@@ -102,7 +119,7 @@ export class CarList {
             return false
         }
 
-        if(car.maxTimeUsage < _duration){
+        if (car.maxTimeUsage < _duration) {
             return false;
         }
         let bookdate: Date = new Date(_startTime);

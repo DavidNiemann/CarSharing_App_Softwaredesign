@@ -37,8 +37,8 @@ export class App {
     private async hndAnswerTasks(_tasknumber: number): Promise<void> {
 
         switch (this.userTasks[_tasknumber - 1]) {
-            case UserTasks.BookCar:
-
+            case UserTasks.SearchCar:
+                await this.searchCars();
                 break;
             case UserTasks.Login:
                 await this.hndUserLogin(UserTasks.Login);
@@ -101,9 +101,9 @@ export class App {
                     this.userTasks.push(Object.values(UserTasks)[nTask]);
                 }
             }
-            else if (Object.values(UserTasks)[nTask] == UserTasks.BookCar) {
+            /* else if (Object.values(UserTasks)[nTask] == UserTasks.SearchCar) {
                 continue;
-            }
+            } */
             else { this.userTasks.push(Object.values(UserTasks)[nTask]) }
 
 
@@ -136,25 +136,27 @@ export class App {
 
         let carDesignations = await CarList.getCarDesignation()
         carDesignations.push("other Cars");
+        carDesignations.push("zurück");
+
 
         let answer: Answers<string> = await Console.showOptions(
             carDesignations,
             "Which Car do you want to choose?"
         );
-
         if (answer.value >= carDesignations.length) {
+            return;
+        }
+        if (answer.value == carDesignations.length - 1) {
             await this.showCars();
+            return;
         } else {
-            let carPropertieString: string[] = await CarList.getCarProperties(answer.value - 1);
-            for (let nPropertie: number = 0; nPropertie < carPropertieString.length; nPropertie++) {
-                Console.printLine(carPropertieString[nPropertie]);
-
-            }
+            await this.showCarProperties(await CarList.getCarId(answer.value - 1));
         }
         let ifBooking: Answers<string> = await Console.showType("Wollen sie diese Auto Buchen", 'confirm');
         if (ifBooking.value == true) { await this.hadBooking(answer.value - 1); } else {
             await this.showCars();
         }
+
 
 
     }
@@ -182,7 +184,7 @@ export class App {
             }
 
             success = await Booking.addBooking(dateOFBooking.value, bookingDuration.value, this.thisUser.username, await CarList.getCarId(_carNumber), await CarList.getCarPrice(_carNumber, bookingDuration.value));
-            
+
             if (success) {
                 Console.printLine("Die Buchung wurde Aufgenommen");
             } else {
@@ -196,5 +198,28 @@ export class App {
 
     }
 
+    private async showCarProperties(_carId: string): Promise<void> {
+        let carPropertieString: string[] = await CarList.getCarProperties(_carId);
+        for (let nPropertie: number = 0; nPropertie < carPropertieString.length; nPropertie++) {
+            Console.printLine(carPropertieString[nPropertie]);
+
+        }
+    }
+
+    private async searchCars(): Promise<void> {
+
+        let designation: Answers<string> = await Console.showType("gib die Bezeichnung ein", 'text');
+        let answer: Answers<string> = await Console.showOptions(
+            Object.values(DriveType),
+            "welche Antreibsart hat das Auto?"
+        );
+
+        let foundCarId: string | null = await CarList.getIdByDesignation(designation.value, Object.values(DriveType)[answer.value - 1]);
+        if (foundCarId) {
+            await this.showCarProperties(foundCarId);
+            let ifBooking: Answers<string> = await Console.showType("Wollen sie diese Auto Buchen", 'confirm');
+            if (ifBooking.value == true) {}
+        }
+    }
 
 }
