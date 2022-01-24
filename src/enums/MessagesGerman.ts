@@ -19,7 +19,9 @@ export enum MessagesGer {
     MessageRentLogin = "Sie müssen angemeldet sein um Autos mieten zu können",
     MessageRentTime = "Das Auto ist zu dieser Zeit nicht verfügbar",
     MessageBookingConfirmation = "Die Buchung wurde Aufgenommen",
-    MessageCarSearch = "Auto wurde nicht gefunden"
+    MessageCarSearch = "Auto wurde nicht gefunden",
+    MessageCaraccessible = "Auto ist zur gewünschten Zeit verfügbar",
+    MessageBookingError = "Es ist ein fehler aufgetreen versuichen sie es erneut"
 
 }
 

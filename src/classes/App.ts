@@ -183,19 +183,35 @@ export class App {
         let dateOFBooking: Answers<string> = await Console.showDate(MessagesGer.QuestionRentStartTime);
         let bookingDuration: Answers<string> = await Console.showType(MessagesGer.QuestionRentDuration, 'number');
 
-        let success: boolean = await CarList.checkAvailability(_carNumber, dateOFBooking.value, bookingDuration.value);
+        let carAilability: boolean = await CarList.checkAvailability(_carNumber, dateOFBooking.value, bookingDuration.value);
 
-        if (success == false) {
+        if (carAilability == false) {
             Console.printLine(MessagesGer.MessageRentTime);
             return;
         }
+       let bookingAilability: boolean = await Booking.checkBookingTime(_carNumber,dateOFBooking.value, bookingDuration.value);
 
-        success = await Booking.addBooking(dateOFBooking.value, bookingDuration.value, this.thisUser.username, _carNumber, await CarList.getCarPrice(_carNumber, bookingDuration.value));
+        if(bookingAilability == false){
+            Console.printLine(MessagesGer.MessageRentTime);
+            return;
+        }
+        Console.printLine(MessagesGer.MessageCaraccessible);
+
+        let bookingPrice: number = await CarList.getCarPrice(_carNumber, bookingDuration.value)
+        
+        Console.printLine("Das Buchung Kosted " + bookingPrice + " Euro");
+
+        let confirmationBooking: Answers<string> = await Console.showType(MessagesGer.QuestionCarConfirmation, 'confirm');
+        if (confirmationBooking.value == false) {
+            return;
+        }
+
+        let success: boolean = await Booking.addBooking(dateOFBooking.value, bookingDuration.value, this.thisUser.username, _carNumber, bookingPrice);
 
         if (success) {
             Console.printLine(MessagesGer.MessageBookingConfirmation);
         } else {
-            Console.printLine(MessagesGer.MessageRentTime);
+            Console.printLine(MessagesGer.MessageBookingError);
         }
 
 
