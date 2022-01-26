@@ -1,1 +1,26 @@
-[{"id":0,"designation":"TESLA Model 3","driveType":"electronic","pricePerMinute":2,"flatRate":40,"bookingTimeFromTo":["1999-04-16T00:00:00.000Z","1999-04-16T21:00:00.000Z"],"maxTimeUsage":300}]
+[
+    {
+        "id": 0,
+        "designation": "TESLA Model 3",
+        "driveType": "electronic",
+        "pricePerMinute": 2,
+        "flatRate": 40,
+        "bookingTimeFromTo": [
+            "1999-04-16T00:00:00.000Z",
+            "1999-04-16T21:00:00.000Z"
+        ],
+        "maxTimeUsage": 300
+    },
+    {
+        "id": 1,
+        "designation": "Audi R8",
+        "driveType": "conventional",
+        "pricePerMinute": 3,
+        "flatRate": 50,
+        "bookingTimeFromTo": [
+            "1999-04-16T10:00:00.000Z",
+            "1999-04-16T18:00:00.000Z"
+        ],
+        "maxTimeUsage": 240
+    }
+]

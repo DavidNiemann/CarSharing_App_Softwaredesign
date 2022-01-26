@@ -137,13 +137,13 @@ export class App {
             bookingTimeFromTo.push(bookingAnswer.value)
         }
 
-        CarList.addNewCar(designation.value, driveType.value, pricePerMinute.value, flatRate.value, maxTimeforUse.value, bookingTimeFromTo);
+       await CarList.addNewCar(designation.value, driveType.value, pricePerMinute.value, flatRate.value, maxTimeforUse.value, bookingTimeFromTo);
 
     }
 
-    private async showCars(): Promise<void> {
+    private async showCars(_numbers?: number[], _date?: Date, _duration?: number): Promise<void> {
 
-        let carDesignations = await CarList.getCarDesignation()
+        let carDesignations = await CarList.getCarDesignations(_numbers)
         carDesignations.push("zeig andere Autos");
         carDesignations.push("zurück");
 
@@ -163,7 +163,7 @@ export class App {
             await this.showCarProperties(answer.value - 1);
         }
         let ifBooking: Answers<string> = await Console.showType(MessagesGer.QuestionCarConfirmation, 'confirm');
-        if (ifBooking.value == true) { await this.hadBooking(answer.value - 1); } else {
+        if (ifBooking.value == true) { await this.hadBooking(answer.value - 1, _date, _duration); } else {
             await this.showCars();
         }
 
@@ -185,13 +185,15 @@ export class App {
 
 
         if (_dateOFBooking && _bookingDuration) {
+
             dateOFBooking = _dateOFBooking;
             bookingDuration = _bookingDuration;
         } else {
+            console.log(_dateOFBooking, _bookingDuration);
             let dateAndDuration: [Date, number] = await this.askForTime();
-           
-            dateOFBooking= (await Console.showDate(MessagesGer.QuestionRentStartTime)).value;
-            bookingDuration = (await Console.showType(MessagesGer.QuestionRentDuration, 'number')).value;
+
+            dateOFBooking = dateAndDuration[0];
+            bookingDuration = dateAndDuration[1];
 
             let carAilability: boolean = await CarList.checkAvailability(_carNumber, dateOFBooking, bookingDuration);
 
@@ -235,7 +237,7 @@ export class App {
     private async askForTime(): Promise<[Date, number]> {
         let dateOFBooking = (await Console.showDate(MessagesGer.QuestionRentStartTime)).value;
         let bookingDuration = (await Console.showType(MessagesGer.QuestionRentDuration, 'number')).value;
-        return [dateOFBooking.value, bookingDuration.value];
+        return [dateOFBooking, bookingDuration];
     }
 
     private async showCarProperties(_carId: number): Promise<void> {
@@ -271,6 +273,20 @@ export class App {
 
     private async searchByTime(): Promise<void> {
         let dateAndDuration: [Date, number] = await this.askForTime();
+        let availableCars: number[] = await CarList.getAllAvailableCarIDsByTime(dateAndDuration[0], dateAndDuration[1]);
+
+        for (let nID = availableCars.length - 1; nID >= 0; nID--) {
+            let available: boolean = await Booking.checkBookingTime(availableCars[nID], dateAndDuration[0], dateAndDuration[1]);
+            if (available == false) {
+                availableCars.splice(nID, 1);
+            }
+        }
+        if (availableCars.length == 0) {
+            Console.printLine(MessagesGer.MessageCarSearch);
+            return;
+        }
+        await this.showCars(availableCars, dateAndDuration[0], dateAndDuration[1]);
+
     }
 
 }

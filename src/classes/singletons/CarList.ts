@@ -30,29 +30,41 @@ export class CarList {
 
     }
 
-    public async getCarDesignation(): Promise<string[]> {
-        let allSaveCars: Car[] = await this.getAllCars()
-        if (this.carCounter >= allSaveCars.length) {
+    public async getCarDesignations(_numbers?: number[]): Promise<string[]> {
+        let cars: Car[] = []
+        if (_numbers) {
+
+            for (let nID = 0; nID < _numbers.length; nID++) {
+               let car: Car | null=  await this.getCarById(_numbers[nID])
+                if(car)
+                cars.push(car);
+
+            }
+        } else {
+            cars = await this.getAllCars()
+        }
+
+        if (this.carCounter >= cars.length) {
             this.carCounter = 0;
-         }
-       
+        }
+
 
         let CarsDesignation: string[] = [];
 
 
-        for (let nCar = this.carCounter; nCar < allSaveCars.length; nCar++) {
+        for (let nCar = this.carCounter; nCar < cars.length; nCar++) {
 
             if (CarsDesignation.length >= 10) {
-               
+
                 break;
             }
-            if(allSaveCars[nCar].driveType == DriveType.Electronic){
-                CarsDesignation.push(allSaveCars[nCar].designation + "(E)");
+            if (cars[nCar].driveType == DriveType.Electronic) {
+                CarsDesignation.push(cars[nCar].designation + "(E)");
                 this.carCounter++;
             }
-            else{
-            CarsDesignation.push(allSaveCars[nCar].designation);
-            this.carCounter++;
+            else {
+                CarsDesignation.push(cars[nCar].designation);
+                this.carCounter++;
             }
         }
 
@@ -138,6 +150,21 @@ export class CarList {
         }
         return false;
     }
+
+    public async getAllAvailableCarIDsByTime(_start: Date, _duration: number): Promise<number[]> {
+        let allCar: Car[] = await this.getAllCars();
+        let availableCarIDs: number[] = [];
+        for (let nCar = 0; nCar < allCar.length; nCar++) {
+            if (await this.checkAvailability(allCar[nCar].id, _start, _duration)) {
+
+                availableCarIDs.push(allCar[nCar].id);
+            }
+
+        }
+        return availableCarIDs;
+    }
+
+
 
 }
 
