@@ -6,7 +6,7 @@ export class CarList {
 
     private static instance: CarList = new CarList();
     private carCounter: number = 0;
-
+    private path: string = "./data/Cars.json";
     private constructor() {
         if (CarList.instance)
             throw new Error("Instead of using new CarList(), please use CarList.getInstance() for Singleton!")
@@ -22,15 +22,15 @@ export class CarList {
 
         let alleCars: Car[] = await this.getAllCars();
 
-        FileHandler.appendJsonFile("./data/Cars.json", new Car(alleCars.length, _designation, Object.values(DriveType)[_driveType - 1], _pricePerMinute, _flatRate, _maxTimeUsage, _bookingTimeFromTo));
+        FileHandler.appendJsonFile(this.path, new Car(alleCars.length, _designation, Object.values(DriveType)[_driveType - 1], _pricePerMinute, _flatRate, _maxTimeUsage, _bookingTimeFromTo));
     }
 
     private async getAllCars(): Promise<Car[]> {
-        return await FileHandler.readJsonFile("./data/Cars.json");
+        return await FileHandler.readJsonFile(this.path);
 
     }
 
-    public async getCarDesignation(): Promise<string[]> {// angebe ob es elektro ist einfügen
+    public async getCarDesignation(): Promise<string[]> {
         let allSaveCars: Car[] = await this.getAllCars()
         if (this.carCounter >= allSaveCars.length) {
             this.carCounter = 0;

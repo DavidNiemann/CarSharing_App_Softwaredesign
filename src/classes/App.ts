@@ -56,12 +56,14 @@ export class App {
             case UserTasks.Logout:
                 await this.thisUser.logout();
                 break;
+            case UserTasks.filterByTime:
+                await this.searchByTime();
+                break;
             default:
                 break;
         }
 
     }
-
 
     public async hndUserLogin(_task: UserTasks): Promise<void> {
         let userName: Answers<string> = await Console.showType(MessagesGer.QuestionUsername, 'text')
@@ -142,7 +144,7 @@ export class App {
     private async showCars(): Promise<void> {
 
         let carDesignations = await CarList.getCarDesignation()
-        carDesignations.push("other Cars");
+        carDesignations.push("zeig andere Autos");
         carDesignations.push("zurück");
 
 
@@ -170,7 +172,7 @@ export class App {
     }
 
 
-    private async hadBooking(_carNumber: number): Promise<void> {
+    private async hadBooking(_carNumber: number, _dateOFBooking?: Date, _bookingDuration?: number): Promise<void> {
         if (this.thisUser.userstatus == UserStatus.Guest) {
             Console.printLine(MessagesGer.MessageRentLogin);
             await this.showOptions([UserTasks.Login, UserTasks.Register, "Zurück"])
@@ -178,27 +180,36 @@ export class App {
                 return;
             }
         }
+        let dateOFBooking: Date;
+        let bookingDuration: number;
 
 
-        let dateOFBooking: Answers<string> = await Console.showDate(MessagesGer.QuestionRentStartTime);
-        let bookingDuration: Answers<string> = await Console.showType(MessagesGer.QuestionRentDuration, 'number');
+        if (_dateOFBooking && _bookingDuration) {
+            dateOFBooking = _dateOFBooking;
+            bookingDuration = _bookingDuration;
+        } else {
+            let dateAndDuration: [Date, number] = await this.askForTime();
+           
+            dateOFBooking= (await Console.showDate(MessagesGer.QuestionRentStartTime)).value;
+            bookingDuration = (await Console.showType(MessagesGer.QuestionRentDuration, 'number')).value;
 
-        let carAilability: boolean = await CarList.checkAvailability(_carNumber, dateOFBooking.value, bookingDuration.value);
+            let carAilability: boolean = await CarList.checkAvailability(_carNumber, dateOFBooking, bookingDuration);
 
-        if (carAilability == false) {
-            Console.printLine(MessagesGer.MessageRentTime);
-            return;
+            if (carAilability == false) {
+                Console.printLine(MessagesGer.MessageRentTime);
+                return;
+            }
+            let bookingAilability: boolean = await Booking.checkBookingTime(_carNumber, dateOFBooking, bookingDuration);
+
+            if (bookingAilability == false) {
+                Console.printLine(MessagesGer.MessageRentTime);
+                return;
+            }
+            Console.printLine(MessagesGer.MessageCaraccessible);
         }
-       let bookingAilability: boolean = await Booking.checkBookingTime(_carNumber,dateOFBooking.value, bookingDuration.value);
 
-        if(bookingAilability == false){
-            Console.printLine(MessagesGer.MessageRentTime);
-            return;
-        }
-        Console.printLine(MessagesGer.MessageCaraccessible);
+        let bookingPrice: number = await CarList.getCarPrice(_carNumber, bookingDuration);
 
-        let bookingPrice: number = await CarList.getCarPrice(_carNumber, bookingDuration.value)
-        
         Console.printLine("Das Buchung Kosted " + bookingPrice + " Euro");
 
         let confirmationBooking: Answers<string> = await Console.showType(MessagesGer.QuestionCarConfirmation, 'confirm');
@@ -206,7 +217,7 @@ export class App {
             return;
         }
 
-        let success: boolean = await Booking.addBooking(dateOFBooking.value, bookingDuration.value, this.thisUser.username, _carNumber, bookingPrice);
+        let success: boolean = await Booking.addBooking(dateOFBooking, bookingDuration, this.thisUser.username, _carNumber, bookingPrice);
 
         if (success) {
             Console.printLine(MessagesGer.MessageBookingConfirmation);
@@ -219,6 +230,12 @@ export class App {
 
 
 
+    }
+
+    private async askForTime(): Promise<[Date, number]> {
+        let dateOFBooking = (await Console.showDate(MessagesGer.QuestionRentStartTime)).value;
+        let bookingDuration = (await Console.showType(MessagesGer.QuestionRentDuration, 'number')).value;
+        return [dateOFBooking.value, bookingDuration.value];
     }
 
     private async showCarProperties(_carId: number): Promise<void> {
@@ -250,6 +267,10 @@ export class App {
 
             Console.printLine(MessagesGer.MessageCarSearch);
         }
+    }
+
+    private async searchByTime(): Promise<void> {
+        let dateAndDuration: [Date, number] = await this.askForTime();
     }
 
 }

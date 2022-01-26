@@ -4,7 +4,7 @@ import FileHandler from "./FileHandler";
 export class Booking {
 
     private static instance: Booking = new Booking();
-
+    private path: string = "./data/Booking.json";
     private constructor() {
         if (Booking.instance)
             throw new Error("Instead of using new Booking(), please use Booking.getInstance() for Singleton!")
@@ -25,7 +25,7 @@ export class Booking {
         }
         if (await this.checkBookingTime(_carId, _date, _duration)) {
 
-            FileHandler.appendJsonFile("./data/Booking.json", newBooking);
+            FileHandler.appendJsonFile(this.path, newBooking);
             return true;
         }
         else {
@@ -76,7 +76,7 @@ export class Booking {
     }
 
     private async getAllBooking(): Promise<BookingDao[]> {
-        return await FileHandler.readJsonFile("./data/Booking.json");
+        return await FileHandler.readJsonFile(this.path);
 
     }
 
