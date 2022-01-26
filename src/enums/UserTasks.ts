@@ -5,5 +5,7 @@ export enum UserTasks {
     RegisterCar = "register car",
     ShowCarList = "show car list",
     SearchCar = "search Car",
-    filterByTime = "search available cars",
+    FilterByTime = "search available cars",
+    ViewPendingBookings = "ausstehende Buchungen einsehen",
+    ViewPastBookings = "vergangene Buchungen einsehen"
  }

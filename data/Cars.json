@@ -22,5 +22,29 @@
             "1999-04-16T18:00:00.000Z"
         ],
         "maxTimeUsage": 240
+    },
+    {
+        "id": 2,
+        "designation": "Koenigsegg Agera RS",
+        "driveType": "conventional",
+        "pricePerMinute": 4,
+        "flatRate": 60,
+        "bookingTimeFromTo": [
+            "1999-04-16T09:00:00.000Z",
+            "1999-04-16T19:00:00.000Z"
+        ],
+        "maxTimeUsage": 120
+    },
+    {
+        "id": 3,
+        "designation": "M2K Motorsports Fort GT",
+        "driveType": "conventional",
+        "pricePerMinute": 4.4,
+        "flatRate": 40,
+        "bookingTimeFromTo": [
+            "1999-04-16T04:00:00.000Z",
+            "1999-04-16T20:00:00.000Z"
+        ],
+        "maxTimeUsage": 300
     }
 ]

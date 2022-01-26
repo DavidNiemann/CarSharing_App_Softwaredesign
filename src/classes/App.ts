@@ -56,7 +56,7 @@ export class App {
             case UserTasks.Logout:
                 await this.thisUser.logout();
                 break;
-            case UserTasks.filterByTime:
+            case UserTasks.FilterByTime:
                 await this.searchByTime();
                 break;
             default:
@@ -189,7 +189,6 @@ export class App {
             dateOFBooking = _dateOFBooking;
             bookingDuration = _bookingDuration;
         } else {
-            console.log(_dateOFBooking, _bookingDuration);
             let dateAndDuration: [Date, number] = await this.askForTime();
 
             dateOFBooking = dateAndDuration[0];

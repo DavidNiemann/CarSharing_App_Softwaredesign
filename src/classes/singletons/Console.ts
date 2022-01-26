@@ -46,6 +46,7 @@ class Console {
     return prompts({
       type: _type,
       name: 'value',
+      float: true,
       message: _question,
       initial: 1
     })
