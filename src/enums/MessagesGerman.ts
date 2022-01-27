@@ -14,6 +14,7 @@ export enum MessagesGer {
     QuestionCarConfirmation = "Wollen sie diese Auto Buchen?",
     QuestionRentStartTime = "An welchem Tag mit start zeitpunkt soll die Buchung sein?",
     QuestionRentDuration = "Wie lange wollen Sie das Auto mieten in Minuten?",
+    QuestionExpiredOrPresent = "Wollen sie vergangene oder zukünftige Buchungen sehen",
     MessageLogin = "Nutzernamen oder passwort falsch",
     MessageUsername = "Nutzernamen enthält sonderzeichen oder ist schon vergeben",
     MessageRentLogin = "Sie müssen angemeldet sein um Autos mieten zu können",

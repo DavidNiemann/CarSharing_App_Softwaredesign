@@ -48,7 +48,7 @@ export class App {
                 await this.hndUserLogin(UserTasks.Register);
                 break;
             case UserTasks.RegisterCar:
-                await this.hadAddNewCar();
+                await this.hndAddNewCar();
                 break;
             case UserTasks.ShowCarList:
                 await this.showCars();
@@ -58,6 +58,9 @@ export class App {
                 break;
             case UserTasks.FilterByTime:
                 await this.searchByTime();
+                break;
+            case UserTasks.ViewBookings:
+                await this.showBookings();
                 break;
             default:
                 break;
@@ -108,7 +111,7 @@ export class App {
                     userTasks.push(allTasks[nTask]);
                 }
             }
-            else if (allTasks[nTask] == UserTasks.Logout) {
+            else if (allTasks[nTask] == UserTasks.Logout || allTasks[nTask] == UserTasks.ViewBookings) {
                 if (this.thisUser.userstatus != UserStatus.Guest) {
                     userTasks.push(allTasks[nTask]);
                 }
@@ -122,7 +125,7 @@ export class App {
 
     }
 
-    public async hadAddNewCar(): Promise<void> {
+    public async hndAddNewCar(): Promise<void> {
         let designation: Answers<string> = await Console.showType(MessagesGer.QuestionCarDesignations, 'text');
         let driveType: Answers<string> = await Console.showOptions(
             Object.values(DriveType),
@@ -137,13 +140,13 @@ export class App {
             bookingTimeFromTo.push(bookingAnswer.value)
         }
 
-       await CarList.addNewCar(designation.value, driveType.value, pricePerMinute.value, flatRate.value, maxTimeforUse.value, bookingTimeFromTo);
+        await CarList.addNewCar(designation.value, driveType.value, pricePerMinute.value, flatRate.value, maxTimeforUse.value, bookingTimeFromTo);
 
     }
 
     private async showCars(_numbers?: number[], _date?: Date, _duration?: number): Promise<void> {
 
-        let carDesignations = await CarList.getCarDesignations(_numbers)
+        let carDesignations: string[] = await CarList.getCarDesignations(_numbers)
         carDesignations.push("zeig andere Autos");
         carDesignations.push("zurück");
 
@@ -163,7 +166,7 @@ export class App {
             await this.showCarProperties(answer.value - 1);
         }
         let ifBooking: Answers<string> = await Console.showType(MessagesGer.QuestionCarConfirmation, 'confirm');
-        if (ifBooking.value == true) { await this.hadBooking(answer.value - 1, _date, _duration); } else {
+        if (ifBooking.value == true) { await this.hndBooking(answer.value - 1, _date, _duration); } else {
             await this.showCars();
         }
 
@@ -172,7 +175,7 @@ export class App {
     }
 
 
-    private async hadBooking(_carNumber: number, _dateOFBooking?: Date, _bookingDuration?: number): Promise<void> {
+    private async hndBooking(_carNumber: number, _dateOFBooking?: Date, _bookingDuration?: number): Promise<void> {
         if (this.thisUser.userstatus == UserStatus.Guest) {
             Console.printLine(MessagesGer.MessageRentLogin);
             await this.showOptions([UserTasks.Login, UserTasks.Register, "Zurück"])
@@ -261,7 +264,7 @@ export class App {
             let ifBooking: Answers<string> = await Console.showType(MessagesGer.QuestionCarConfirmation, 'confirm');
             if (ifBooking.value == true) {
 
-                await this.hadBooking(foundCarId);
+                await this.hndBooking(foundCarId);
             }
         }
         else {
@@ -286,6 +289,66 @@ export class App {
         }
         await this.showCars(availableCars, dateAndDuration[0], dateAndDuration[1]);
 
+    }
+
+    private async showBookings(): Promise<void> {
+
+        let answer: Answers<string> = await Console.showOptions(
+            ["Vergangene", "Ausstehende", "Durchschnittspreis und Gessambetrag"],
+            MessagesGer.QuestionExpiredOrPresent
+        );
+        await this.hndShowBookings(answer.value);
+    }
+
+    private async hndShowBookings(_answerNumber: number): Promise<void> {
+        let bookings: [number, Date, number, number][] = [];
+        let cost: [number, number];
+        switch (_answerNumber) {
+            case 1:
+                bookings = await Booking.getBookingsFromUser(false, this.thisUser.username);
+                if (bookings.length == 0) {
+                    Console.printLine("Sie haben keine vergangenen Buchungen:");
+                    return;
+                }
+                Console.printLine("Ihre vergangenen Buchungen:");
+                await this.outputBookings(bookings)
+                break;
+            case 2:
+                bookings = await Booking.getBookingsFromUser(true, this.thisUser.username);
+                if (bookings.length == 0) {
+                    Console.printLine("Sie haben keine ausstehnden Buchungen:");
+                    return;
+                }
+                Console.printLine("Ihre ausstehnden Buchungen:");
+                await this.outputBookings(bookings)
+                break;
+            case 3:
+                cost = await Booking.getCostsOfBookingsFromUsers(this.thisUser.username);
+                Console.printLine("Sie Haben insgesammt für " + cost[0] + " Euro buchungen vorgenommen");
+                Console.printLine("der durchschnittliche betrag Ihre Buchungen beträgt " + cost[1] + " Euro");
+                break;
+            default:
+                break;
+        }
+
+
+
+
+
+    }
+    private async outputBookings(_booking: [number, Date, number, number][]): Promise<void> {
+        for (let nBooking: number = 0; nBooking < _booking.length; nBooking++) {
+
+            let carDesignation: string[] = await CarList.getCarDesignations([_booking[nBooking][0]])
+            let bookingDate: Date = new Date(_booking[nBooking][1]);
+            Console.printLine("");
+            Console.printLine("Auto: " + carDesignation[0]);
+            Console.printLine("Datum: " + bookingDate.getDate() + "." + bookingDate.getMonth() + "." + bookingDate.getFullYear());
+            Console.printLine("Uhrzeit: " + bookingDate.getHours() + "." + bookingDate.getMinutes() + " Uhr");
+            Console.printLine("Dauer: " + _booking[nBooking][2] + " Minuten");
+            Console.printLine("Price: " + _booking[nBooking][3] + " Euro");
+            Console.printLine("");
+        }
     }
 
 }

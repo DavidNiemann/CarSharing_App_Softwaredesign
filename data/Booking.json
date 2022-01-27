@@ -1,16 +1,1 @@
-[
-    {
-        "date": "2022-01-27T16:29:27.982Z",
-        "duration": 60,
-        "userName": "david",
-        "carId": 1,
-        "price": 230
-    },
-    {
-        "date": "2022-01-27T16:31:07.319Z",
-        "duration": 60,
-        "userName": "david",
-        "carId": 0,
-        "price": 160
-    }
-]
+[{"date":"2022-01-26T16:29:27.982Z","duration":60,"userName":"david","carId":1,"price":230},{"date":"2022-01-27T16:31:07.319Z","duration":60,"userName":"david","carId":0,"price":160},{"date":"2022-01-29T15:00:04.309Z","duration":60,"userName":"david","carId":3,"price":304}]

@@ -1,3 +1,4 @@
+import { connected } from "process";
 import { BookingDao } from "../dao/BookingDao"
 import FileHandler from "./FileHandler";
 
@@ -78,6 +79,43 @@ export class Booking {
     private async getAllBooking(): Promise<BookingDao[]> {
         return await FileHandler.readJsonFile(this.path);
 
+    }
+
+    public async getBookingsFromUser(_past: boolean, _user: string): Promise<[number, Date, number, number][]> {
+        let allBookings: BookingDao[] = await this.getAllBooking();
+        let bookingString: [number, Date, number, number][] = [];
+        for (let nBooking = 0; nBooking < allBookings.length; nBooking++) {
+            if (allBookings[nBooking].userName == _user) {
+                if (await this.isTheBookingInThePast(allBookings[nBooking]) == _past) {
+
+                    bookingString.push([allBookings[nBooking].carId, allBookings[nBooking].date, allBookings[nBooking].duration, allBookings[nBooking].price]);
+                }
+
+            }
+        }
+        return bookingString;
+
+    }
+    private async isTheBookingInThePast(_booking: BookingDao): Promise<boolean> {
+        let dateNow: Date = new Date();
+        let bookinDate: Date = new Date(_booking.date);
+        if (dateNow >= bookinDate) {
+            return false;
+        }
+        return true;
+    }
+
+    public async getCostsOfBookingsFromUsers(_user: string): Promise<[number, number]> {
+        let allBookings: BookingDao[] = await this.getAllBooking();
+        let totalCost: number = 0;
+        let amountOfBookings: number = 0;
+        for (let nBooking = 0; nBooking < allBookings.length; nBooking++) {
+            if (allBookings[nBooking].userName == _user) {
+                totalCost += allBookings[nBooking].price;
+                amountOfBookings++;
+            }
+
+        } return [totalCost, totalCost / amountOfBookings];
     }
 
 }
