@@ -1,4 +1,4 @@
-import { DriveType } from "../enums/Drivetype";
+import { DriveType } from "../../enums/Drivetype";
 
 
 export class Car {

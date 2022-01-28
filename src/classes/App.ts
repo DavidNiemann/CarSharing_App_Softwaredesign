@@ -214,7 +214,7 @@ export class App {
 
         let bookingPrice: number = await CarList.getCarPrice(_carNumber, bookingDuration);
 
-        Console.printLine("Das Buchung Kosted " + bookingPrice + " Euro");
+        Console.printLine(MessagesGer.MassageBookingCost + bookingPrice + MessagesGer.termCurrency);
 
         let confirmationBooking: Answers<string> = await Console.showType(MessagesGer.QuestionCarConfirmation, 'confirm');
         if (confirmationBooking.value == false) {
@@ -273,7 +273,7 @@ export class App {
         }
     }
 
-    private async searchByTime(): Promise<void> {
+    private async searchByTime(): Promise<void> { // DoDO: fix next Cars by list ist schows all carn not only avalibl
         let dateAndDuration: [Date, number] = await this.askForTime();
         let availableCars: number[] = await CarList.getAllAvailableCarIDsByTime(dateAndDuration[0], dateAndDuration[1]);
 
@@ -307,25 +307,25 @@ export class App {
             case 1:
                 bookings = await Booking.getBookingsFromUser(false, this.thisUser.username);
                 if (bookings.length == 0) {
-                    Console.printLine("Sie haben keine vergangenen Buchungen:");
+                    Console.printLine(MessagesGer.MassageNoPastBookings);
                     return;
                 }
-                Console.printLine("Ihre vergangenen Buchungen:");
+                Console.printLine(MessagesGer.MassagePastBookings);
                 await this.outputBookings(bookings)
                 break;
             case 2:
                 bookings = await Booking.getBookingsFromUser(true, this.thisUser.username);
                 if (bookings.length == 0) {
-                    Console.printLine("Sie haben keine ausstehnden Buchungen:");
+                    Console.printLine(MessagesGer.MassageNoPendingBookings);
                     return;
                 }
-                Console.printLine("Ihre ausstehnden Buchungen:");
+                Console.printLine(MessagesGer.MassagePendingBookings);
                 await this.outputBookings(bookings)
                 break;
             case 3:
                 cost = await Booking.getCostsOfBookingsFromUsers(this.thisUser.username);
-                Console.printLine("Sie Haben insgesammt für " + cost[0] + " Euro buchungen vorgenommen");
-                Console.printLine("der durchschnittliche betrag Ihre Buchungen beträgt " + cost[1] + " Euro");
+                Console.printLine(MessagesGer.MassageBookingPrice1 + cost[0].toFixed(2) + MessagesGer.MassageBookingPrice2 );
+                Console.printLine(MessagesGer.MassageAverageCost + cost[1].toFixed(2) + MessagesGer.termCurrency);
                 break;
             default:
                 break;
@@ -342,11 +342,11 @@ export class App {
             let carDesignation: string[] = await CarList.getCarDesignations([_booking[nBooking][0]])
             let bookingDate: Date = new Date(_booking[nBooking][1]);
             Console.printLine("");
-            Console.printLine("Auto: " + carDesignation[0]);
-            Console.printLine("Datum: " + bookingDate.getDate() + "." + bookingDate.getMonth() + "." + bookingDate.getFullYear());
-            Console.printLine("Uhrzeit: " + bookingDate.getHours() + "." + bookingDate.getMinutes() + " Uhr");
-            Console.printLine("Dauer: " + _booking[nBooking][2] + " Minuten");
-            Console.printLine("Price: " + _booking[nBooking][3] + " Euro");
+            Console.printLine(MessagesGer.termCar + ": " + carDesignation[0]);
+            Console.printLine(MessagesGer.termDate + ": " + bookingDate.getDate() + "." + bookingDate.getMonth() + 1 + "." + bookingDate.getFullYear());
+            Console.printLine(MessagesGer.termTime + ": " + bookingDate.getHours() + "." + bookingDate.getMinutes() + MessagesGer.termClock);
+            Console.printLine(MessagesGer.termDuration + ": " + _booking[nBooking][2] + MessagesGer.termMinutes);
+            Console.printLine(MessagesGer.termPrice + ": " + _booking[nBooking][3].toFixed(2) + MessagesGer.termCurrency);
             Console.printLine("");
         }
     }

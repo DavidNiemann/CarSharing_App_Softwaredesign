@@ -1,5 +1,5 @@
 import { DriveType } from "../../enums/Drivetype";
-import { Car } from "../Car";
+import { Car } from "../dao/Car";
 import FileHandler from "./FileHandler";
 
 export class CarList {

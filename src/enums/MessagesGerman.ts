@@ -22,7 +22,23 @@ export enum MessagesGer {
     MessageBookingConfirmation = "Die Buchung wurde Aufgenommen",
     MessageCarSearch = "Auto wurde nicht gefunden",
     MessageCaraccessible = "Auto ist zur gewünschten Zeit verfügbar",
-    MessageBookingError = "Es ist ein fehler aufgetreen versuichen sie es erneut"
+    MessageBookingError = "Es ist ein fehler aufgetreen versuichen sie es erneut",
+    MassageNoPastBookings = "Sie haben keine vergangenen Buchungen",
+    MassageNoPendingBookings = "Sie haben keine Ausstehende Buchungen",
+    MassagePastBookings = "Ihre vergangenen Buchungen:",
+    MassagePendingBookings = "Ihre ausstehnden Buchungen:",
+    MassageBookingCost = "Das Buchung Kosted ",
+    MassageBookingPrice1 = "Sie Haben insgesammt für ",
+    MassageBookingPrice2 = " Euro buchungen vorgenommen",
+    MassageAverageCost = "der durchschnittliche betrag Ihre Buchungen beträgt ",
 
+    termCurrency = "Euro",
+    termDate = "Datum",
+    termTime = "Uhrzeit",
+    termDuration = "Dauer",
+    termPrice = "Preis",
+    termCar = "Auto",
+    termMinutes = "Minuten",
+    termClock = "Uhr"
 }
 
