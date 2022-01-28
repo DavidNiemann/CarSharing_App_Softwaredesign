@@ -242,12 +242,30 @@ export class App {
         return [dateOFBooking, bookingDuration];
     }
 
-    private async showCarProperties(_carId: number): Promise<void> {
+    /* private async showCarProperties(_carId: number): Promise<void> {
         let carPropertieString: string[] = await CarList.getCarProperties(_carId);
         for (let nPropertie: number = 0; nPropertie < carPropertieString.length; nPropertie++) {
             Console.printLine(carPropertieString[nPropertie]);
 
         }
+    } */
+    private async showCarProperties(_carId: number): Promise<void> {
+        let carPropertieString: string[] = await CarList.getCarProperties(_carId);
+        let CarDateStart: Date = new Date(carPropertieString[4]);
+        let CarDateEnd: Date = new Date(carPropertieString[5]);
+        console.log(carPropertieString);
+        Console.printLine("");
+        Console.printLine(MessagesGer.termCar + " : " + carPropertieString[0]);
+        Console.printLine(MessagesGer.termdrivetype + " : " + carPropertieString[1]);
+        Console.printLine(MessagesGer.termPrice + " : " + carPropertieString[2] + " " + MessagesGer.termCurrency);
+        Console.printLine(MessagesGer.termFlatRate + " : " + carPropertieString[3] + " " + MessagesGer.termCurrency);
+        Console.printLine(MessagesGer.MassageAvailableTime1 + " "+ CarDateStart.getHours() + "." + CarDateStart.getMinutes() + MessagesGer.MassageAvailableTime2 + CarDateEnd.getHours() + "." + CarDateEnd.getMinutes() + " " + MessagesGer.termClock);
+        Console.printLine(MessagesGer.termMaxDuration + " : " + carPropertieString[6] + " " + MessagesGer.termMinutes);
+
+
+        Console.printLine("");
+
+
     }
 
     private async searchCars(): Promise<void> {
@@ -324,7 +342,7 @@ export class App {
                 break;
             case 3:
                 cost = await Booking.getCostsOfBookingsFromUsers(this.thisUser.username);
-                Console.printLine(MessagesGer.MassageBookingPrice1 + cost[0].toFixed(2) + MessagesGer.MassageBookingPrice2 );
+                Console.printLine(MessagesGer.MassageBookingPrice1 + cost[0].toFixed(2) + MessagesGer.MassageBookingPrice2);
                 Console.printLine(MessagesGer.MassageAverageCost + cost[1].toFixed(2) + MessagesGer.termCurrency);
                 break;
             default:
@@ -342,11 +360,11 @@ export class App {
             let carDesignation: string[] = await CarList.getCarDesignations([_booking[nBooking][0]])
             let bookingDate: Date = new Date(_booking[nBooking][1]);
             Console.printLine("");
-            Console.printLine(MessagesGer.termCar + ": " + carDesignation[0]);
-            Console.printLine(MessagesGer.termDate + ": " + bookingDate.getDate() + "." + bookingDate.getMonth() + 1 + "." + bookingDate.getFullYear());
-            Console.printLine(MessagesGer.termTime + ": " + bookingDate.getHours() + "." + bookingDate.getMinutes() + MessagesGer.termClock);
-            Console.printLine(MessagesGer.termDuration + ": " + _booking[nBooking][2] + MessagesGer.termMinutes);
-            Console.printLine(MessagesGer.termPrice + ": " + _booking[nBooking][3].toFixed(2) + MessagesGer.termCurrency);
+            Console.printLine(MessagesGer.termCar + " : " + carDesignation[0]);
+            Console.printLine(MessagesGer.termDate + " : " + bookingDate.getDate() + "." + bookingDate.getMonth() + 1 + "." + bookingDate.getFullYear());
+            Console.printLine(MessagesGer.termTime + " : " + bookingDate.getHours() + "." + bookingDate.getMinutes() + MessagesGer.termClock);
+            Console.printLine(MessagesGer.termDuration + " : " + _booking[nBooking][2] + " " + MessagesGer.termMinutes);
+            Console.printLine(MessagesGer.termPrice + " : " + _booking[nBooking][3].toFixed(2) + " " + MessagesGer.termCurrency);
             Console.printLine("");
         }
     }

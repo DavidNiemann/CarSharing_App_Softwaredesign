@@ -35,9 +35,9 @@ export class CarList {
         if (_numbers) {
 
             for (let nID = 0; nID < _numbers.length; nID++) {
-               let car: Car | null=  await this.getCarById(_numbers[nID])
-                if(car)
-                cars.push(car);
+                let car: Car | null = await this.getCarById(_numbers[nID])
+                if (car)
+                    cars.push(car);
 
             }
         } else {
@@ -74,7 +74,7 @@ export class CarList {
     public async getCarProperties(_carID: number): Promise<string[]> {
         let chosenCar: Car | null = await this.getCarById(_carID);
         if (chosenCar == null) {
-            return ["Auto nicht gefunden"]
+            return []
         }
         let PropertieString: string[] = [];
         chosenCar.bookingTimeFromTo[0] = new Date(chosenCar.bookingTimeFromTo[0])
@@ -82,10 +82,10 @@ export class CarList {
         for (let [key, value] of Object.entries(chosenCar)) {
             if (key == "bookingTimeFromTo") {
 
-                PropertieString.push(key + ": " + chosenCar.bookingTimeFromTo[0].getHours() + " to " + chosenCar.bookingTimeFromTo[1].getHours() + " o'clock");
-            }
-            else {
-                PropertieString.push(key + ": " + value);
+                PropertieString.push( chosenCar.bookingTimeFromTo[0].toJSON());
+                PropertieString.push( chosenCar.bookingTimeFromTo[1].toJSON());
+            } else if (key != "id") {
+                PropertieString.push(value + "")
             }
 
         }

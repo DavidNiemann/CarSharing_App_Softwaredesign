@@ -28,9 +28,11 @@ export enum MessagesGer {
     MassagePastBookings = "Ihre vergangenen Buchungen:",
     MassagePendingBookings = "Ihre ausstehnden Buchungen:",
     MassageBookingCost = "Das Buchung Kosted ",
-    MassageBookingPrice1 = "Sie Haben insgesammt für ",
+    MassageBookingPrice1 = "Sie Haben insgesammt für",
     MassageBookingPrice2 = " Euro buchungen vorgenommen",
-    MassageAverageCost = "der durchschnittliche betrag Ihre Buchungen beträgt ",
+    MassageAverageCost = "der durchschnittliche betrag Ihre Buchungen beträgt",
+    MassageAvailableTime1 = "Verfügbar von",
+    MassageAvailableTime2 = " bis ",
 
     termCurrency = "Euro",
     termDate = "Datum",
@@ -39,6 +41,9 @@ export enum MessagesGer {
     termPrice = "Preis",
     termCar = "Auto",
     termMinutes = "Minuten",
-    termClock = "Uhr"
+    termClock = "Uhr",
+    termdrivetype = "Antriebsart",
+    termFlatRate = "Pauschalpreis",
+    termMaxDuration = "maximale Mietdauer"
 }
 
