@@ -159,7 +159,7 @@ export class App {
             return;
         }
         if (answer.value == carDesignations.length - 1) {
-            await this.showCars();
+            await this.showCars(_numbers, _date, _duration);
             return;
 
         } else {
@@ -178,7 +178,7 @@ export class App {
     private async hndBooking(_carNumber: number, _dateOFBooking?: Date, _bookingDuration?: number): Promise<void> {
         if (this.thisUser.userstatus == UserStatus.Guest) {
             Console.printLine(MessagesGer.MessageRentLogin);
-            await this.showOptions([UserTasks.Login, UserTasks.Register, "Zurück"])
+            await this.showOptions([UserTasks.Login, UserTasks.Register, "zurück"])
             if (this.thisUser.userstatus == UserStatus.Guest) {// usertask zurück einfügen 
                 return;
             }
@@ -242,13 +242,7 @@ export class App {
         return [dateOFBooking, bookingDuration];
     }
 
-    /* private async showCarProperties(_carId: number): Promise<void> {
-        let carPropertieString: string[] = await CarList.getCarProperties(_carId);
-        for (let nPropertie: number = 0; nPropertie < carPropertieString.length; nPropertie++) {
-            Console.printLine(carPropertieString[nPropertie]);
 
-        }
-    } */
     private async showCarProperties(_carId: number): Promise<void> {
         let carPropertieString: string[] = await CarList.getCarProperties(_carId);
         let CarDateStart: Date = new Date(carPropertieString[4]);
@@ -291,7 +285,7 @@ export class App {
         }
     }
 
-    private async searchByTime(): Promise<void> { // DoDO: fix next Cars by list ist schows all carn not only avalibl
+    private async searchByTime(): Promise<void> { 
         let dateAndDuration: [Date, number] = await this.askForTime();
         let availableCars: number[] = await CarList.getAllAvailableCarIDsByTime(dateAndDuration[0], dateAndDuration[1]);
 
