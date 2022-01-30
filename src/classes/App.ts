@@ -247,7 +247,7 @@ export class App {
         let carPropertieString: string[] = await CarList.getCarProperties(_carId);
         let CarDateStart: Date = new Date(carPropertieString[4]);
         let CarDateEnd: Date = new Date(carPropertieString[5]);
-        console.log(carPropertieString);
+
         Console.printLine("");
         Console.printLine(MessagesGer.termCar + " : " + carPropertieString[0]);
         Console.printLine(MessagesGer.termdrivetype + " : " + carPropertieString[1]);

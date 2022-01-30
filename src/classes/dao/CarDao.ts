@@ -1,7 +1,8 @@
+
 import { DriveType } from "../../enums/Drivetype";
 
 
-export class Car {
+/* export class Car {
     public id: number;
     public designation: string;
     public driveType: string;
@@ -21,6 +22,15 @@ export class Car {
      
     }
 
+} */
 
+export interface CarDao {
+    id: number, 
+    designation: string,
+    driveType: DriveType,
+    flatRate: number,
+    pricePerMinute: number,
+    maxTimeUsage: number,
+    bookingTimeFromTo: Date[]
 
 }
