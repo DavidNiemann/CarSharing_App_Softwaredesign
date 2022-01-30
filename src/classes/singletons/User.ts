@@ -1,12 +1,25 @@
-import { UserStatus } from "../enums/UserStatus";
-import FileHandler from '../classes/singletons/FileHandler';
-import { UserDao } from '../classes/dao/UserDao';
-import CheckUsername from "./helpers/CheckUsername";
+import { UserStatus } from "../../enums/UserStatus";
+import FileHandler from './FileHandler';
+import { UserDao } from '../dao/UserDao';
+import CheckUsername from "../helpers/CheckUsername";
 
 export class User {
+
+    private static instance: User = new User();
+
     public userstatus: UserStatus = UserStatus.Guest;
     public username: string = "";
-    constructor() { }
+
+    private constructor() {
+
+        if (User.instance)
+            throw new Error("Instead of using new User(), please use User.getInstance() for Singleton!")
+        User.instance = this;
+    }
+
+    public static getInstance(): User {
+        return User.instance;
+    }
 
     public async register(_userName: string, _passwort: string): Promise<boolean> {
         let User: UserDao[] = FileHandler.readJsonFile("./data/User.json")
@@ -49,7 +62,7 @@ export class User {
         return false;
     }
 
-    
+
 
     public async logout(): Promise<void> {
         this.userstatus = UserStatus.Guest;
@@ -57,3 +70,4 @@ export class User {
     }
 
 }
+export default User.getInstance();

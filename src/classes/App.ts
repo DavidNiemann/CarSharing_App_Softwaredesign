@@ -2,8 +2,8 @@
 import Console from "./singletons/Console";
 import CarList from "./singletons/CarList";
 import Booking from "./singletons/Booking";
+import User  from "./singletons/User";
 
-import { User } from "./User";
 import { Answers } from "prompts";
 import { UserTasks } from "../enums/UserTasks";
 import { UserStatus } from "../enums/UserStatus";
@@ -13,7 +13,7 @@ import { MessagesGer } from "../enums/MessagesGerman";
 
 
 export class App {
-    private thisUser: User = new User();
+   
     public static app: App = new App();
     private run: boolean = true;
     public async startApp(): Promise<void> {
@@ -54,7 +54,7 @@ export class App {
                 await this.showCars();
                 break;
             case UserTasks.Logout:
-                await this.thisUser.logout();
+                await User.logout();
                 break;
             case UserTasks.FilterByTime:
                 await this.searchByTime();
@@ -75,7 +75,7 @@ export class App {
 
         switch (_task) {
             case UserTasks.Login:
-                success = await this.thisUser.login(userName.value, password.value);
+                success = await User.login(userName.value, password.value);
                 if (!success) {
                     Console.printLine(MessagesGer.MessageLogin);
                     await this.hndUserLogin(_task);
@@ -83,7 +83,7 @@ export class App {
 
                 break;
             case UserTasks.Register:
-                success = await this.thisUser.register(userName.value, password.value);
+                success = await User.register(userName.value, password.value);
                 if (!success) {
                     Console.printLine(MessagesGer.MessageUsername);
                     await this.hndUserLogin(_task);
@@ -103,16 +103,16 @@ export class App {
 
 
             if (allTasks[nTask] == UserTasks.RegisterCar) {
-                if (this.thisUser.userstatus == UserStatus.Administrator) {
+                if (User.userstatus == UserStatus.Administrator) {
                     userTasks.push(allTasks[nTask]);
                 }
             } else if (allTasks[nTask] == UserTasks.Login || allTasks[nTask] == UserTasks.Register) {
-                if (this.thisUser.userstatus == UserStatus.Guest) {
+                if (User.userstatus == UserStatus.Guest) {
                     userTasks.push(allTasks[nTask]);
                 }
             }
             else if (allTasks[nTask] == UserTasks.Logout || allTasks[nTask] == UserTasks.ViewBookings) {
-                if (this.thisUser.userstatus != UserStatus.Guest) {
+                if (User.userstatus != UserStatus.Guest) {
                     userTasks.push(allTasks[nTask]);
                 }
             }
@@ -176,10 +176,10 @@ export class App {
 
 
     private async hndBooking(_carNumber: number, _dateOFBooking?: Date, _bookingDuration?: number): Promise<void> {
-        if (this.thisUser.userstatus == UserStatus.Guest) {
+        if (User.userstatus == UserStatus.Guest) {
             Console.printLine(MessagesGer.MessageRentLogin);
             await this.showOptions([UserTasks.Login, UserTasks.Register, "zurück"])
-            if (this.thisUser.userstatus == UserStatus.Guest) {// usertask zurück einfügen 
+            if (User.userstatus == UserStatus.Guest) {// usertask zurück einfügen 
                 return;
             }
         }
@@ -221,7 +221,7 @@ export class App {
             return;
         }
 
-        let success: boolean = await Booking.addBooking(dateOFBooking, bookingDuration, this.thisUser.username, _carNumber, bookingPrice);
+        let success: boolean = await Booking.addBooking(dateOFBooking, bookingDuration, User.username, _carNumber, bookingPrice);
 
         if (success) {
             Console.printLine(MessagesGer.MessageBookingConfirmation);
@@ -317,7 +317,7 @@ export class App {
         let cost: [number, number];
         switch (_answerNumber) {
             case 1:
-                bookings = await Booking.getBookingsFromUser(false, this.thisUser.username);
+                bookings = await Booking.getBookingsFromUser(false, User.username);
                 if (bookings.length == 0) {
                     Console.printLine(MessagesGer.MassageNoPastBookings);
                     return;
@@ -326,7 +326,7 @@ export class App {
                 await this.outputBookings(bookings)
                 break;
             case 2:
-                bookings = await Booking.getBookingsFromUser(true, this.thisUser.username);
+                bookings = await Booking.getBookingsFromUser(true, User.username);
                 if (bookings.length == 0) {
                     Console.printLine(MessagesGer.MassageNoPendingBookings);
                     return;
@@ -335,7 +335,7 @@ export class App {
                 await this.outputBookings(bookings)
                 break;
             case 3:
-                cost = await Booking.getCostsOfBookingsFromUsers(this.thisUser.username);
+                cost = await Booking.getCostsOfBookingsFromUsers(User.username);
                 Console.printLine(MessagesGer.MassageBookingPrice1 + cost[0].toFixed(2) + MessagesGer.MassageBookingPrice2);
                 Console.printLine(MessagesGer.MassageAverageCost + cost[1].toFixed(2) + MessagesGer.termCurrency);
                 break;
