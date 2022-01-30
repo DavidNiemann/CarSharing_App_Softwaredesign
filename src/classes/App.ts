@@ -285,7 +285,7 @@ export class App {
         }
     }
 
-    private async searchByTime(): Promise<void> { 
+    private async searchByTime(): Promise<void> {  
         let dateAndDuration: [Date, number] = await this.askForTime();
         let availableCars: number[] = await CarList.getAllAvailableCarIDsByTime(dateAndDuration[0], dateAndDuration[1]);
 

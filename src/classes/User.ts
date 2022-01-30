@@ -1,6 +1,7 @@
 import { UserStatus } from "../enums/UserStatus";
 import FileHandler from '../classes/singletons/FileHandler';
 import { UserDao } from '../classes/dao/UserDao';
+import CheckUsername from "./helpers/CheckUsername";
 
 export class User {
     public userstatus: UserStatus = UserStatus.Guest;
@@ -18,7 +19,7 @@ export class User {
 
         }
 
-        if (this.checkUserName(_userName)) {
+        if (CheckUsername.checkUsername(_userName)) {
             let newUser: UserDao = {
                 username: _userName,
                 passwort: _passwort,
@@ -48,10 +49,7 @@ export class User {
         return false;
     }
 
-    private checkUserName(_username: string): boolean {
-        let pattern = /^[a-zA-Z0-9]{3,15}$/;
-        return pattern.test(_username);
-    }
+    
 
     public async logout(): Promise<void> {
         this.userstatus = UserStatus.Guest;

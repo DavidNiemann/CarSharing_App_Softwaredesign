@@ -25,7 +25,7 @@ class Console {
   }
 
   //for showing options (choices)
-  public showOptions(_options : string[], _question: string) : Promise<Answers<string>> {
+  public async showOptions(_options : string[], _question: string) : Promise<Answers<string>> {
 
     let choices: any[] = []
 
@@ -41,8 +41,7 @@ class Console {
     })
   }
 
-  //for input
-  public showType(_question: string , _type: PromptType) : Promise<Answers<string>> {
+  public async showType(_question: string , _type: PromptType) : Promise<Answers<string>> {
     return prompts({
       type: _type,
       name: 'value',
@@ -52,7 +51,7 @@ class Console {
     })
   }
 
-  public showHour(_question: string) : Promise<Answers<string>> {
+  public async showHour(_question: string) : Promise<Answers<string>> {
     return prompts({
       type: 'date',
       name: 'value',
