@@ -51,7 +51,7 @@ class Console {
     })
   }
 
-  public async showHour(_question: string) : Promise<Answers<string>> {
+  public async showTime(_question: string) : Promise<Answers<string>> {
     return prompts({
       type: 'date',
       name: 'value',

@@ -14,16 +14,15 @@ import { MessagesGer } from "../enums/MessagesGerman";
 
 export class App {
    
-    public static app: App = new App();
     private run: boolean = true;
     public async startApp(): Promise<void> {
         while (this.run) {
 
-            await this.showOptions(await this.hndUserTasksToString());
+            await this.showTasks(await this.hndUserTasksToString());
         }
     }
 
-    public async showOptions(_task: string[]): Promise<void> {
+    private async showTasks(_task: string[]): Promise<void> {
 
         let answer: Answers<string> = await Console.showOptions(
             _task,
@@ -68,7 +67,7 @@ export class App {
 
     }
 
-    public async hndUserLogin(_task: UserTasks): Promise<void> {
+    private async hndUserLogin(_task: UserTasks): Promise<void> {
         let userName: Answers<string> = await Console.showType(MessagesGer.QuestionUsername, 'text')
         let password: Answers<string> = await Console.showType(MessagesGer.QuestionPassword, 'password')
         let success: boolean = false;
@@ -125,7 +124,7 @@ export class App {
 
     }
 
-    public async hndAddNewCar(): Promise<void> {
+    private async hndAddNewCar(): Promise<void> {
         let designation: Answers<string> = await Console.showType(MessagesGer.QuestionCarDesignations, 'text');
         let driveType: Answers<string> = await Console.showOptions(
             Object.values(DriveType),
@@ -136,7 +135,7 @@ export class App {
         let maxTimeforUse: Answers<string> = await Console.showType(MessagesGer.QuestionCarMaxRentalDuration, 'number');
         let bookingTimeFromTo: Date[] = [];
         for (let index = 0; index < 2; index++) {
-            let bookingAnswer: Answers<string> = await Console.showHour(MessagesGer.QuestionCarMaxRentalPeriod)
+            let bookingAnswer: Answers<string> = await Console.showTime(MessagesGer.QuestionCarMaxRentalPeriod)
             bookingTimeFromTo.push(bookingAnswer.value)
         }
 
@@ -158,7 +157,7 @@ export class App {
         if (answer.value >= carDesignations.length) {
             return;
         }
-        if (answer.value == carDesignations.length - 1) {
+        else if (answer.value == carDesignations.length - 1) {
             await this.showCars(_numbers, _date, _duration);
             return;
 
@@ -178,7 +177,7 @@ export class App {
     private async hndBooking(_carNumber: number, _dateOFBooking?: Date, _bookingDuration?: number): Promise<void> {
         if (User.userstatus == UserStatus.Guest) {
             Console.printLine(MessagesGer.MessageRentLogin);
-            await this.showOptions([UserTasks.Login, UserTasks.Register, "zurück"])
+            await this.showTasks([UserTasks.Login, UserTasks.Register, "zurück"])
             if (User.userstatus == UserStatus.Guest) {// usertask zurück einfügen 
                 return;
             }

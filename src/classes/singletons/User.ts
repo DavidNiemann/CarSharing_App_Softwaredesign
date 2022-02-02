@@ -9,6 +9,7 @@ export class User {
 
     public userstatus: UserStatus = UserStatus.Guest;
     public username: string = "";
+    private path: string = "./data/User.json";
 
     private constructor() {
 
@@ -22,7 +23,7 @@ export class User {
     }
 
     public async register(_userName: string, _passwort: string): Promise<boolean> {
-        let User: UserDao[] = FileHandler.readJsonFile("./data/User.json")
+        let User: UserDao[] = FileHandler.readJsonFile(this.path)
 
         for (let nUser = 0; nUser < User.length; nUser++) {
             if (User[nUser].username == _userName) {
@@ -38,7 +39,7 @@ export class User {
                 passwort: _passwort,
                 status: UserStatus.Registered
             }
-            FileHandler.appendJsonFile("./data/User.json", newUser);
+            FileHandler.appendJsonFile(this.path, newUser);
             this.userstatus = UserStatus.Registered;
             return true;
         }
@@ -47,7 +48,7 @@ export class User {
 
     public async login(_userName: string, _passwort: string): Promise<boolean> {
 
-        let allUser: UserDao[] = await FileHandler.readJsonFile("./data/User.json");
+        let allUser: UserDao[] = await FileHandler.readJsonFile(this.path);
         for (let i: number = 0; i < allUser.length; i++) {
             if (allUser[i].username == _userName && allUser[i].passwort == _passwort) {
 

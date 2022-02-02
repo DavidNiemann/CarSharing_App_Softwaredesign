@@ -13,7 +13,8 @@ namespace CarSharing {
     }
 
     public async showProgramStatus() : Promise<void> {
-      await App.app.startApp();
+      let app:App  = new App()
+      await app.startApp();
     }
   }
 

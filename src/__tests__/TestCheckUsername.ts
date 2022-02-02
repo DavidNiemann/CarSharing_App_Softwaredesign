@@ -1,7 +1,7 @@
 import CheckUsername from "../classes/helpers/CheckUsername";
 
 describe("check mail addresses", () => {
-    let invalidUsernams: string[] = ["abc@abc", "-dav+d:", "davidNimann1234567"];
+    let invalidUsernams: string[] = ["d@david", "-dav+d:", "davidNimann1234567", "d"];
     let validUsernames: string[] = ["David123", "Peter212"];
     for (let usernames of invalidUsernams) {
         test("check invalid mail address", () => {

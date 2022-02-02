@@ -1,14 +1,14 @@
 export class CheckUsername {
-    private static _instance : CheckUsername = new CheckUsername();
+    private static instance : CheckUsername = new CheckUsername();
   
     private constructor() {
-      if(CheckUsername._instance) 
+      if(CheckUsername.instance) 
         throw new Error("Instead of using new CheckUsername(), please use CheckUsername.getInstance() for Singleton!")
-        CheckUsername._instance = this;
+        CheckUsername.instance = this;
     }
   
     public static getInstance() : CheckUsername {
-      return CheckUsername._instance;
+      return CheckUsername.instance;
     }
   
     public checkUsername(_username: string): boolean {
