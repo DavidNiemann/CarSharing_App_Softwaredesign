@@ -2,7 +2,7 @@
 import Console from "./singletons/Console";
 import CarList from "./singletons/CarList";
 import Booking from "./singletons/Booking";
-import User  from "./singletons/User";
+import User from "./singletons/User";
 
 import { Answers } from "prompts";
 import { UserTasks } from "../enums/UserTasks";
@@ -13,7 +13,7 @@ import { MessagesGer } from "../enums/MessagesGerman";
 
 
 export class App {
-   
+
     private run: boolean = true;
     public async startApp(): Promise<void> {
         while (this.run) {
@@ -252,7 +252,7 @@ export class App {
         Console.printLine(MessagesGer.termdrivetype + " : " + carPropertieString[1]);
         Console.printLine(MessagesGer.termPrice + " : " + carPropertieString[2] + " " + MessagesGer.termCurrency);
         Console.printLine(MessagesGer.termFlatRate + " : " + carPropertieString[3] + " " + MessagesGer.termCurrency);
-        Console.printLine(MessagesGer.MassageAvailableTime1 + " "+ CarDateStart.getHours() + "." + CarDateStart.getMinutes() + MessagesGer.MassageAvailableTime2 + CarDateEnd.getHours() + "." + CarDateEnd.getMinutes() + " " + MessagesGer.termClock);
+        Console.printLine(MessagesGer.MassageAvailableTime1 + " " + CarDateStart.getHours() + "." + CarDateStart.getMinutes() + MessagesGer.MassageAvailableTime2 + CarDateEnd.getHours() + "." + CarDateEnd.getMinutes() + " " + MessagesGer.termClock);
         Console.printLine(MessagesGer.termMaxDuration + " : " + carPropertieString[6] + " " + MessagesGer.termMinutes);
 
 
@@ -284,7 +284,7 @@ export class App {
         }
     }
 
-    private async searchByTime(): Promise<void> {  
+    private async searchByTime(): Promise<void> {
         let dateAndDuration: [Date, number] = await this.askForTime();
         let availableCars: number[] = await CarList.getAllAvailableCarIDsByTime(dateAndDuration[0], dateAndDuration[1]);
 

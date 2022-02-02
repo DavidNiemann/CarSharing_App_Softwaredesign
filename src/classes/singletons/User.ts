@@ -1,7 +1,7 @@
 import { UserStatus } from "../../enums/UserStatus";
 import FileHandler from './FileHandler';
 import { UserDao } from '../dao/UserDao';
-import CheckUsername from "../helpers/CheckUsername";
+import CheckUsername from "../../helpers/CheckUsername";
 
 export class User {
 
