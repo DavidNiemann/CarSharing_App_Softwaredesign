@@ -10,7 +10,11 @@ export class CheckUsername {
     public static getInstance() : CheckUsername {
       return CheckUsername.instance;
     }
-  
+    /**
+     *  checks whether the username corresponds to the specifications
+     * @param _username to check the string
+     * @returns true if the specifications are met
+     */
     public checkUsername(_username: string): boolean {
         let pattern = /^[a-zA-Z0-9]{3,15}$/;
         return pattern.test(_username);

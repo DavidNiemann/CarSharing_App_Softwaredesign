@@ -1,5 +1,7 @@
 
-
+/**
+ * Console outputs in German
+ */
 export enum MessagesGer {
     QuestionTask = "Was wollen sie machen?",
     QuestionUsername = "gib dein Nutzernamen ein",
@@ -33,17 +35,23 @@ export enum MessagesGer {
     MassageAverageCost = "der durchschnittliche betrag Ihre Buchungen beträgt",
     MassageAvailableTime1 = "Verfügbar von",
     MassageAvailableTime2 = " bis ",
+    MassageOtherCars = "Ander Autos Anzeigen",
+  
 
-    termCurrency = "Euro",
-    termDate = "Datum",
-    termTime = "Uhrzeit",
-    termDuration = "Dauer",
-    termPrice = "Preis",
-    termCar = "Auto",
+    TermCurrency = "Euro",
+    TermDate = "Datum",
+    TermTime = "Uhrzeit",
+    TermDuration = "Dauer",
+    TermPrice = "Preis",
+    TermCar = "Auto",
     termMinutes = "Minuten",
-    termClock = "Uhr",
-    termdrivetype = "Antriebsart",
-    termFlatRate = "Pauschalpreis",
-    termMaxDuration = "maximale Mietdauer"
+    TermClock = "Uhr",
+    Termdrivetype = "Antriebsart",
+    TermFlatRate = "Pauschalpreis",
+    TermMaxDuration = "maximale Mietdauer",
+    TermBack = "Zurück",
+    TermPast = "Vergangene",
+    TermPending = "Ausstehende",
+    TermAmount = "Durchschnittspreis und Gessambetrag"
 }
 

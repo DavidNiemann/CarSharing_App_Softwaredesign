@@ -21,7 +21,10 @@ export class UserHandler {
     public static getInstance(): UserHandler {
         return UserHandler.instance;
     }
-
+    /**
+     * 
+     * @returns true if you registration was successful
+     */
     public async hndRegister(_userName: string, _passwort: string): Promise<boolean> {
         let User: UserDao[] = FileHandler.readJsonFile(this.path)
 
@@ -45,7 +48,10 @@ export class UserHandler {
         }
         return false;
     }
-
+    /**
+     * 
+     * @returns true if you Login was successful
+     */
     public async hndLogin(_userName: string, _passwort: string): Promise<boolean> {
 
         let allUser: UserDao[] = await FileHandler.readJsonFile(this.path);
@@ -63,8 +69,9 @@ export class UserHandler {
         return false;
     }
 
-
-
+    /**
+     * resets the user to guest and deletes the username
+     */
     public async hndLogout(): Promise<void> {
         this.userstatus = UserStatus.Guest;
         this.username = "";

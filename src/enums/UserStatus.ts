@@ -1,3 +1,6 @@
+/**
+ * property of a user
+ */
 export enum UserStatus {
 
     Registered =  "registered",  

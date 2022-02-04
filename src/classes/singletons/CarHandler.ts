@@ -17,12 +17,14 @@ export class CarHandler {
         return CarHandler.instance;
     }
 
-
+    /**
+     * creates new car and saves it in the json
+     */
     public async addNewCar(_designation: string, _driveType: number, _pricePerMinute: number, _flatRate: number, _maxTimeUsage: number, _bookingTimeFromTo: Date[]): Promise<void> {
 
         let alleCars: CarDao[] = await this.getAllCars();
 
-        let newCar =  {
+        let newCar = {
             id: _designation + "-" + alleCars.length,
             designation: _designation,
             driveType: Object.values(DriveType)[_driveType - 1],
@@ -36,12 +38,19 @@ export class CarHandler {
 
         FileHandler.appendJsonFile(this.path, newCar);
     }
-
+    /**
+     * @returns all Cars from the Json
+     */
     private async getAllCars(): Promise<CarDao[]> {
         return await FileHandler.readJsonFile(this.path);
 
     }
-
+    /**
+     * returns car names up to 10.
+     * on the next call, the display starts with the last call
+     * @param _numbers if not all cars should be considered
+     * @returns car designations 
+     */
     public async getCarDesignations(_numbers?: number[]): Promise<string[]> {
         let cars: CarDao[] = []
         if (_numbers) {
@@ -82,7 +91,10 @@ export class CarHandler {
 
         return CarsDesignation;
     }
-
+    /**
+     * @param _carID id of the selected car
+     * @returns car properties
+     */
     public async getCarProperties(_carID: number): Promise<string[]> {
         let chosenCar: CarDao | null = await this.getCarById(_carID);
         if (chosenCar == null) {
@@ -104,7 +116,11 @@ export class CarHandler {
 
         return PropertieString;
     }
-
+    /**
+     * 
+     * @param _carID id of the searched car
+     * @returns [CarDao] based on an id if ID not found returns null
+     */
     private async getCarById(_carID: number): Promise<CarDao | null> {
         let allCars: CarDao[] = await this.getAllCars();
         for (let nCar = 0; nCar < allCars.length; nCar++) {
@@ -116,11 +132,18 @@ export class CarHandler {
         return null;
 
     }
+
+    /**
+     * 
+     * @param _carDesignation Designation of the searched car
+     * @param _driveType if the [DriveType] is to be considered
+     * @returns ID of the Car
+     */
     public async getIdByDesignation(_carDesignation: string, _driveType?: DriveType): Promise<number | null> {
         let allCars: CarDao[] = await this.getAllCars();
         for (let nCar = 0; nCar < allCars.length; nCar++) {
             if (allCars[nCar].designation == _carDesignation) {
-              
+
                 if (!_driveType || _driveType == allCars[nCar].driveType) {
                     return allCars[nCar].id;
                 }
@@ -130,13 +153,17 @@ export class CarHandler {
         return null;
 
     }
-
+    /**
+     * @returns Cost of booking
+     */
     public async getCarPrice(_carID: number, _duration: number): Promise<number> {
         let allCars: CarDao[] = await this.getAllCars();
         return allCars[_carID].flatRate + (allCars[_carID].pricePerMinute * _duration);
     }
-
-    public async checkAvailability(_carID: number, _startTime: Date, _duration: number): Promise<boolean> { // einigen Auf id oder ID
+    /**
+     * @returns rtrue if the car matches in time
+     */
+    public async checkAvailability(_carID: number, _startTime: Date, _duration: number): Promise<boolean> { 
 
         let car: CarDao | null = await this.getCarById(_carID);
         if (car == null) {
@@ -163,6 +190,9 @@ export class CarHandler {
         return false;
     }
 
+    /**
+     * @returns all cars that are available at the time
+     */
     public async getAllAvailableCarIDsByTime(_start: Date, _duration: number): Promise<number[]> {
         let allCar: CarDao[] = await this.getAllCars();
         let availableCarIDs: number[] = [];

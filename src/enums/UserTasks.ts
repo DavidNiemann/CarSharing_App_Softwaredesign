@@ -1,3 +1,7 @@
+/**
+ * Action options of a user
+ */
+
 export enum UserTasks {
     Login = "login",
     Register = "register",
@@ -7,5 +11,5 @@ export enum UserTasks {
     SearchCar = "search Car",
     FilterByTime = "search available cars",
     ViewBookings = "Buchungen einsehen",
-   
+    ExitApp = "App beenden"
  }

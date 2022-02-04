@@ -15,7 +15,10 @@ export class BookingHandler {
     public static getInstance(): BookingHandler {
         return BookingHandler.instance;
     }
-
+/**
+ * saves a booking with the parameters in a json
+ * @returns true if the booking was created successfully
+ */
     public async addBooking(_date: Date, _duration: number, _userName: string, _carId: number, _price: number): Promise<boolean> {
         let newBooking: BookingDao = {
             date: _date,
@@ -36,7 +39,10 @@ export class BookingHandler {
 
 
     }
-
+/**
+ * checks the booking time with the already existing ones
+ * @returns true if the booking times do not overlap
+ */
     public async checkBookingTime(_carId: number, _date: Date, _duration: number): Promise<boolean> {
         let allBookings: BookingDao[] = await this.getAllBooking();
         let bookdate: Date = new Date(_date);
@@ -75,12 +81,20 @@ export class BookingHandler {
         }
         return true;
     }
-
+/**
+ * 
+ * @returns all bookings from the Json
+ */
     private async getAllBooking(): Promise<BookingDao[]> {
         return await FileHandler.readJsonFile(this.path);
 
     }
-
+/**
+ * searches all bookings of a user
+ * @param _past for pending bookings false for past true
+ * @param _user UserID
+ * @returns booking parameters in an array Auto ID, Date, Duration, Price
+ */
     public async getBookingsFromUser(_past: boolean, _user: string): Promise<[number, Date, number, number][]> {
         let allBookings: BookingDao[] = await this.getAllBooking();
         let bookingString: [number, Date, number, number][] = [];
@@ -96,6 +110,11 @@ export class BookingHandler {
         return bookingString;
 
     }
+
+    /**
+     * @param _booking [BookingDao] to be checked
+     * @returns true if the date is in the past
+     */
     private async isTheBookingInThePast(_booking: BookingDao): Promise<boolean> {
         let dateNow: Date = new Date();
         let bookinDate: Date = new Date(_booking.date);
@@ -104,7 +123,11 @@ export class BookingHandler {
         }
         return true;
     }
-
+    /**
+     * average cost per booking
+     * @param _user username
+     * @returns totalCost, average cost per booking
+     */
     public async getCostsOfBookingsFromUsers(_user: string): Promise<[number, number]> {
         let allBookings: BookingDao[] = await this.getAllBooking();
         let totalCost: number = 0;
