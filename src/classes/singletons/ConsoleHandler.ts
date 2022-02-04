@@ -1,8 +1,8 @@
 import readline from 'readline';
 import prompts, { Answers, PromptType } from 'prompts';
 
-class Console {
-  private static instance : Console = new Console();
+class ConsoleHandler {
+  private static instance : ConsoleHandler = new ConsoleHandler();
 
   public consoleLine : readline.ReadLine = readline.createInterface({
       input: process.stdin,
@@ -10,13 +10,13 @@ class Console {
     })
 
    private constructor() {
-    if(Console.instance) 
+    if(ConsoleHandler.instance) 
       throw new Error("Instead of using new Console(), please use Console.getInstance() for Singleton!")
-    Console.instance = this;
+    ConsoleHandler.instance = this;
   }
 
-  public static getInstance() : Console {
-    return Console.instance;
+  public static getInstance() : ConsoleHandler {
+    return ConsoleHandler.instance;
   }
 
   public printLine(line : string) : void {
@@ -74,4 +74,4 @@ class Console {
 
 }
 
-export default Console.getInstance();
+export default ConsoleHandler.getInstance();

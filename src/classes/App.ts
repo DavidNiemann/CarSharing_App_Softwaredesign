@@ -1,8 +1,8 @@
 
-import Console from "./singletons/Console";
-import CarList from "./singletons/CarList";
-import Booking from "./singletons/Booking";
-import User from "./singletons/User";
+import Console from "./singletons/ConsoleHandler";
+import CarList from "./singletons/CarHandler";
+import Booking from "./singletons/BookingHandler";
+import User from "./singletons/UserHandler";
 
 import { Answers } from "prompts";
 import { UserTasks } from "../enums/UserTasks";
@@ -15,12 +15,17 @@ import { MessagesGer } from "../enums/MessagesGerman";
 export class App {
 
     private run: boolean = true;
+
+    /**
+     * 
+     */
     public async startApp(): Promise<void> {
         while (this.run) {
 
             await this.showTasks(await this.hndUserTasksToString());
         }
     }
+
 
     private async showTasks(_task: string[]): Promise<void> {
 
@@ -53,7 +58,7 @@ export class App {
                 await this.showCars();
                 break;
             case UserTasks.Logout:
-                await User.logout();
+                await User.hndLogout();
                 break;
             case UserTasks.FilterByTime:
                 await this.searchByTime();
@@ -74,7 +79,7 @@ export class App {
 
         switch (_task) {
             case UserTasks.Login:
-                success = await User.login(userName.value, password.value);
+                success = await User.hndLogin(userName.value, password.value);
                 if (!success) {
                     Console.printLine(MessagesGer.MessageLogin);
                     await this.hndUserLogin(_task);
@@ -82,7 +87,7 @@ export class App {
 
                 break;
             case UserTasks.Register:
-                success = await User.register(userName.value, password.value);
+                success = await User.hndRegister(userName.value, password.value);
                 if (!success) {
                     Console.printLine(MessagesGer.MessageUsername);
                     await this.hndUserLogin(_task);

@@ -2,18 +2,18 @@ import { connected } from "process";
 import { BookingDao } from "../dao/BookingDao"
 import FileHandler from "./FileHandler";
 
-export class Booking {
+export class BookingHandler {
 
-    private static instance: Booking = new Booking();
+    private static instance: BookingHandler = new BookingHandler();
     private path: string = "./data/Booking.json";
     private constructor() {
-        if (Booking.instance)
+        if (BookingHandler.instance)
             throw new Error("Instead of using new Booking(), please use Booking.getInstance() for Singleton!")
-        Booking.instance = this;
+        BookingHandler.instance = this;
     }
 
-    public static getInstance(): Booking {
-        return Booking.instance;
+    public static getInstance(): BookingHandler {
+        return BookingHandler.instance;
     }
 
     public async addBooking(_date: Date, _duration: number, _userName: string, _carId: number, _price: number): Promise<boolean> {
@@ -120,4 +120,4 @@ export class Booking {
 
 }
 
-export default Booking.getInstance();
+export default BookingHandler.getInstance();

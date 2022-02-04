@@ -1,9 +1,9 @@
 [
     {
-        "date": "2022-01-31T11:00:21.612Z",
+        "date": "2022-02-04T11:00:50.207Z",
         "duration": 60,
         "userName": "david",
-        "carId": 0,
-        "price": 160
+        "carId": 1,
+        "price": 230
     }
 ]

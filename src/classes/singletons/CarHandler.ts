@@ -2,19 +2,19 @@ import { DriveType } from "../../enums/Drivetype";
 import { CarDao } from "../dao/CarDao";
 import FileHandler from "./FileHandler";
 
-export class CarList {
+export class CarHandler {
 
-    private static instance: CarList = new CarList();
+    private static instance: CarHandler = new CarHandler();
     private carCounter: number = 0;
     private path: string = "./data/Cars.json";
     private constructor() {
-        if (CarList.instance)
+        if (CarHandler.instance)
             throw new Error("Instead of using new CarList(), please use CarList.getInstance() for Singleton!")
-        CarList.instance = this;
+        CarHandler.instance = this;
     }
 
-    public static getInstance(): CarList {
-        return CarList.instance;
+    public static getInstance(): CarHandler {
+        return CarHandler.instance;
     }
 
 
@@ -180,4 +180,4 @@ export class CarList {
 
 }
 
-export default CarList.getInstance();
+export default CarHandler.getInstance();
