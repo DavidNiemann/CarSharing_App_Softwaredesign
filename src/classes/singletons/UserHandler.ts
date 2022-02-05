@@ -38,12 +38,14 @@ export class UserHandler {
 
         if (CheckUsername.checkUsername(_userName)) {
             let newUser: UserDao = {
+                id: User.length,
                 username: _userName,
                 passwort: _passwort,
                 status: UserStatus.Registered
             }
             FileHandler.appendJsonFile(this.path, newUser);
             this.userstatus = UserStatus.Registered;
+            this.username = _userName;
             return true;
         }
         return false;

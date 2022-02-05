@@ -1,9 +1,26 @@
 [
     {
-        "date": "2022-02-04T11:00:50.207Z",
-        "duration": 60,
+        "id": 0,
+        "date": "2022-02-07T11:00:33.896Z",
+        "duration": 10,
         "userName": "david",
-        "carId": 1,
-        "price": 230
+        "carId": 3,
+        "price": 84
+    },
+    {
+        "id": 1,
+        "date": "2022-02-06T11:15:37.853Z",
+        "duration": 40,
+        "userName": "david",
+        "carId": 0,
+        "price": 120
+    },
+    {
+        "id": 2,
+        "date": "2022-03-06T11:00:02.840Z",
+        "duration": 10,
+        "userName": "admin",
+        "carId": 2,
+        "price": 100
     }
 ]

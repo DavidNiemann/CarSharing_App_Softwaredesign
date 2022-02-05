@@ -1,10 +1,12 @@
 [
     {
+        "id": 0,
         "username": "admin",
         "passwort": "123",
         "status": "administrator"
     },
     {
+        "id": 1,
         "username": "david",
         "passwort": "123",
         "status": "registered"

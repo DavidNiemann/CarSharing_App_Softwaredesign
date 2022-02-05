@@ -21,6 +21,7 @@ export class BookingHandler {
  */
     public async addBooking(_date: Date, _duration: number, _userName: string, _carId: number, _price: number): Promise<boolean> {
         let newBooking: BookingDao = {
+            id: (await this.getAllBooking()).length,
             date: _date,
             duration: _duration,
             userName: _userName,
