@@ -38,7 +38,7 @@ export class UserHandler {
 
         if (CheckUsername.checkUsername(_userName)) {
             let newUser: UserDao = {
-                id: User.length,
+                id: User[User.length - 1].id + 1,
                 username: _userName,
                 passwort: _passwort,
                 status: UserStatus.Registered

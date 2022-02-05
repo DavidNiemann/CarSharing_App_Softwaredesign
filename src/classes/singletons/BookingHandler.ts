@@ -15,13 +15,14 @@ export class BookingHandler {
     public static getInstance(): BookingHandler {
         return BookingHandler.instance;
     }
-/**
- * saves a booking with the parameters in a json
- * @returns true if the booking was created successfully
- */
+    /**
+     * saves a booking with the parameters in a json
+     * @returns true if the booking was created successfully
+     */
     public async addBooking(_date: Date, _duration: number, _userName: string, _carId: number, _price: number): Promise<boolean> {
+        let allBookings: BookingDao[] = await this.getAllBooking();
         let newBooking: BookingDao = {
-            id: (await this.getAllBooking()).length,
+            id: allBookings[allBookings.length - 1].id + 1,
             date: _date,
             duration: _duration,
             userName: _userName,
@@ -40,10 +41,10 @@ export class BookingHandler {
 
 
     }
-/**
- * checks the booking time with the already existing ones
- * @returns true if the booking times do not overlap
- */
+    /**
+     * checks the booking time with the already existing ones
+     * @returns true if the booking times do not overlap
+     */
     public async checkBookingTime(_carId: number, _date: Date, _duration: number): Promise<boolean> {
         let allBookings: BookingDao[] = await this.getAllBooking();
         let bookdate: Date = new Date(_date);
@@ -82,20 +83,20 @@ export class BookingHandler {
         }
         return true;
     }
-/**
- * 
- * @returns all bookings from the Json
- */
+    /**
+     * 
+     * @returns all bookings from the Json
+     */
     private async getAllBooking(): Promise<BookingDao[]> {
         return await FileHandler.readJsonFile(this.path);
 
     }
-/**
- * searches all bookings of a user
- * @param _past for pending bookings false for past true
- * @param _user UserID
- * @returns booking parameters in an array Auto ID, Date, Duration, Price
- */
+    /**
+     * searches all bookings of a user
+     * @param _past for pending bookings false for past true
+     * @param _user UserID
+     * @returns booking parameters in an array Auto ID, Date, Duration, Price
+     */
     public async getBookingsFromUser(_past: boolean, _user: string): Promise<[number, Date, number, number][]> {
         let allBookings: BookingDao[] = await this.getAllBooking();
         let bookingString: [number, Date, number, number][] = [];

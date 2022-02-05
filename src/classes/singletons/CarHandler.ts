@@ -25,7 +25,7 @@ export class CarHandler {
         let alleCars: CarDao[] = await this.getAllCars();
 
         let newCar = {
-            id: _designation + "-" + alleCars.length,
+            id: alleCars[alleCars.length - 1].id + 1,
             designation: _designation,
             driveType: Object.values(DriveType)[_driveType - 1],
             pricePerMinute: _pricePerMinute,
@@ -163,7 +163,7 @@ export class CarHandler {
     /**
      * @returns rtrue if the car matches in time
      */
-    public async checkAvailability(_carID: number, _startTime: Date, _duration: number): Promise<boolean> { 
+    public async checkAvailability(_carID: number, _startTime: Date, _duration: number): Promise<boolean> {
 
         let car: CarDao | null = await this.getCarById(_carID);
         if (car == null) {
