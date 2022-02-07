@@ -1,6 +1,6 @@
 # CarSharing_App_Softwaredesign
-Software design WS 21/22
-Link to UML the Reposetory: https://github.com/DavidNiemann/CarSharing_App_Softwaredesign  
+Software design WS 21/22  
+Link to the Reposetory: https://github.com/DavidNiemann/CarSharing_App_Softwaredesign  
 Link to UML diagrams: https://github.com/DavidNiemann/CarSharing_App_Softwaredesign/tree/main/UML  
 
 ## Requirements
