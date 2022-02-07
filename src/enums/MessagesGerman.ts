@@ -31,11 +31,11 @@ export enum MessagesGer {
     MassagePendingBookings = "Ihre ausstehnden Buchungen:",
     MassageBookingCost = "Das Buchung Kosted ",
     MassageBookingPrice1 = "Sie Haben insgesammt für",
-    MassageBookingPrice2 = " Euro buchungen vorgenommen",
+    MassageBookingPrice2 = "Euro buchungen vorgenommen",
     MassageAverageCost = "der durchschnittliche betrag Ihre Buchungen beträgt",
     MassageAvailableTime1 = "Verfügbar von",
     MassageAvailableTime2 = " bis ",
-    MassageOtherCars = "Ander Autos Anzeigen",
+    MassageOtherCars = "andre Autos Anzeigen",
   
 
     TermCurrency = "Euro",

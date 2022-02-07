@@ -191,10 +191,13 @@ export class App {
             return;
 
         } else {
-            await this.showCarProperties(answer.value - 1);
+            await this.showCarProperties(_numbers ? _numbers[answer.value - 1] : answer.value - 1);
         }
         let ifBooking: Answers<string> = await Console.showType(MessagesGer.QuestionCarConfirmation, 'confirm');
-        if (ifBooking.value == true) { await this.hndBooking(answer.value - 1, _date, _duration); } else {
+        if (ifBooking.value == true) {
+            await this.hndBooking(
+                _numbers ? _numbers[answer.value - 1] : answer.value - 1, _date, _duration);
+        } else {
             await this.showCars();
         }
 
@@ -210,10 +213,11 @@ export class App {
      * @param _bookingDuration duration of a booking
      */
     private async hndBooking(_carNumber: number, _dateOFBooking?: Date, _bookingDuration?: number): Promise<void> {
+        console.log(_carNumber)
         if (User.userstatus == UserStatus.Guest) {
             Console.printLine(MessagesGer.MessageRentLogin);
             await this.showTasks([UserTasks.Login, UserTasks.Register, "zurück"])
-            if (User.userstatus == UserStatus.Guest) { 
+            if (User.userstatus == UserStatus.Guest) {
                 return;
             }
         }
@@ -275,10 +279,10 @@ export class App {
         return [dateOFBooking, bookingDuration];
     }
 
-/**
- * show the properties of a selected car
- * @param _carId Id of selected car
- */
+    /**
+     * show the properties of a selected car
+     * @param _carId Id of selected car
+     */
     private async showCarProperties(_carId: number): Promise<void> {
         let carPropertieString: string[] = await CarList.getCarProperties(_carId);
         let CarDateStart: Date = new Date(carPropertieString[4]);
@@ -298,9 +302,9 @@ export class App {
 
     }
 
-/**
- * asks for a car designation and regulates his booking if found
- */
+    /**
+     * asks for a car designation and regulates his booking if found
+     */
     private async searchCars(): Promise<void> {
 
         let designation: Answers<string> = await Console.showType(MessagesGer.QuestionCarDesignations, 'text');
@@ -323,9 +327,10 @@ export class App {
             Console.printLine(MessagesGer.MessageCarSearch);
         }
     }
-/**
- *  asks for a time and duration and searches cars that are available for this
- */
+    /**
+     *  asks for a time and duration and searches cars that are available for this
+     * @toDo falsches auto zückgegeben
+     */
     private async searchByTime(): Promise<void> {
         let dateAndDuration: [Date, number] = await this.askForTime();
         let availableCars: number[] = await CarList.getAllAvailableCarIDsByTime(dateAndDuration[0], dateAndDuration[1]);
@@ -343,21 +348,21 @@ export class App {
         await this.showCars(availableCars, dateAndDuration[0], dateAndDuration[1]);
 
     }
-/**
- * asks if you want to show past pending or statistics of bookings
- */
+    /**
+     * asks if you want to show past pending or statistics of bookings
+     */
     private async showBookings(): Promise<void> {
 
         let answer: Answers<string> = await Console.showOptions(
-            [MessagesGer.TermPast, MessagesGer.TermPending,  MessagesGer.TermAmount],
+            [MessagesGer.TermPast, MessagesGer.TermPending, MessagesGer.TermAmount],
             MessagesGer.QuestionExpiredOrPresent
         );
         await this.hndShowBookings(answer.value);
     }
-/**
- * node of the decision which statistics should be displayed
- * @param _answerNumber number for the next steps 
- */
+    /**
+     * node of the decision which statistics should be displayed
+     * @param _answerNumber number for the next steps 
+     */
     private async hndShowBookings(_answerNumber: number): Promise<void> {
         let bookings: [number, Date, number, number][] = [];
         let cost: [number, number];
@@ -382,8 +387,8 @@ export class App {
                 break;
             case 3:
                 cost = await Booking.getCostsOfBookingsFromUsers(User.username);
-                Console.printLine(MessagesGer.MassageBookingPrice1 + cost[0].toFixed(2) + MessagesGer.MassageBookingPrice2);
-                Console.printLine(MessagesGer.MassageAverageCost + cost[1].toFixed(2) + MessagesGer.TermCurrency);
+                Console.printLine(MessagesGer.MassageBookingPrice1 + " " + cost[0].toFixed(2) + " " + MessagesGer.MassageBookingPrice2);
+                Console.printLine(MessagesGer.MassageAverageCost + " " + cost[1].toFixed(2) + " " + MessagesGer.TermCurrency);
                 break;
             default:
                 break;
