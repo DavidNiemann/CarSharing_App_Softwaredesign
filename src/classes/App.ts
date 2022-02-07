@@ -94,7 +94,7 @@ export class App {
                 success = await User.hndLogin(userName.value, password.value);
                 if (!success) {
                     Console.printLine(MessagesGer.MessageLogin);
-                   
+
                 }
 
                 break;
@@ -102,7 +102,7 @@ export class App {
                 success = await User.hndRegister(userName.value, password.value);
                 if (!success) {
                     Console.printLine(MessagesGer.MessageUsername);
-                   
+
                 }
                 break;
 
@@ -213,7 +213,6 @@ export class App {
      * @param _bookingDuration duration of a booking
      */
     private async hndBooking(_carNumber: number, _dateOFBooking?: Date, _bookingDuration?: number): Promise<void> {
-        console.log(_carNumber)
         if (User.userstatus == UserStatus.Guest) {
             Console.printLine(MessagesGer.MessageRentLogin);
             await this.showTasks([UserTasks.Login, UserTasks.Register, "zurück"])
