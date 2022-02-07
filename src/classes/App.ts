@@ -94,7 +94,7 @@ export class App {
                 success = await User.hndLogin(userName.value, password.value);
                 if (!success) {
                     Console.printLine(MessagesGer.MessageLogin);
-                    await this.hndUserLogin(_task);
+                   
                 }
 
                 break;
@@ -102,7 +102,7 @@ export class App {
                 success = await User.hndRegister(userName.value, password.value);
                 if (!success) {
                     Console.printLine(MessagesGer.MessageUsername);
-                    await this.hndUserLogin(_task);
+                   
                 }
                 break;
 
